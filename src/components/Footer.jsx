@@ -1,4 +1,6 @@
-export default function Footer() {
+import './Footer.css';
+
+export default function Footer({ setPage = () => {} }) {
   const currentYear = new Date().getFullYear();
 
   const productLinks = [
@@ -73,7 +75,15 @@ export default function Footer() {
         <div className="footer-top">
           {/* Logo Brand Info Column */}
           <div className="footer-brand-col">
-            <div className="footer-logo">
+            <a
+              href="#"
+              className="footer-logo"
+              style={{ textDecoration: 'none', cursor: 'pointer' }}
+              onClick={(e) => {
+                e.preventDefault();
+                setPage('home');
+              }}
+            >
               {/* Volcano Peak SVG logo */}
               <div className="footer-logo-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,7 +92,7 @@ export default function Footer() {
                 </svg>
               </div>
               <span className="footer-brand-name">Volcano</span>
-            </div>
+            </a>
             <p className="footer-brand-desc">
               Connecting skilled volunteers with NGOs creating change. Tiny contributions, planetary impact.
             </p>
@@ -108,7 +118,23 @@ export default function Footer() {
             <ul className="footer-links-list">
               {productLinks.map((link, idx) => (
                 <li key={idx}>
-                  <a href={link.href}>{link.label}</a>
+                  <a
+                    href={link.href}
+                    onClick={(e) => {
+                      if (link.label === 'Opportunities') {
+                        e.preventDefault();
+                        setPage('opportunities');
+                      } else if (link.label === 'For NGOs') {
+                        e.preventDefault();
+                        setPage('dashboardNgo');
+                      } else if (link.label === 'For Volunteers') {
+                        e.preventDefault();
+                        setPage('dashboard');
+                      }
+                    }}
+                  >
+                    {link.label}
+                  </a>
                 </li>
               ))}
             </ul>

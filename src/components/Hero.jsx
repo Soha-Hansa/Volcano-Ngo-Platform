@@ -1,6 +1,6 @@
 import './Hero.css';
 
-export default function Hero() {
+export default function Hero({ setPage = () => {} }) {
   const avatars = [
     { id: 1, name: 'Sarah', url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&fit=crop&crop=faces&auto=format&q=80' },
     { id: 2, name: 'David', url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&fit=crop&crop=faces&auto=format&q=80' },
@@ -45,7 +45,7 @@ export default function Hero() {
 
           {/* Action Buttons */}
           <div className="hero-actions">
-            <button className="btn-primary" id="btn-join-volunteer">
+            <button className="btn-primary" id="btn-join-volunteer" onClick={() => setPage('opportunities')}>
               <span>Join as Volunteer</span>
               <svg
                 width="16"
@@ -65,7 +65,7 @@ export default function Hero() {
               </svg>
             </button>
             
-            <button className="btn-secondary" id="btn-register-ngo">
+            <button className="btn-secondary" id="btn-register-ngo" onClick={() => setPage('signup')}>
               Register NGO
             </button>
           </div>

@@ -1,6 +1,7 @@
 import ScrollReveal from './ScrollReveal';
+import './Cta.css';
 
-export default function Cta() {
+export default function Cta({ setPage = () => {} }) {
   return (
     <section className="cta-section" id="cta-section">
       <div className="cta-container">
@@ -33,7 +34,15 @@ export default function Cta() {
                 <a href="#" className="btn-cta-primary" id="cta-btn-get-started">
                   Get started free
                 </a>
-                <a href="#" className="btn-cta-secondary" id="cta-btn-browse">
+                <a
+                  href="#"
+                  className="btn-cta-secondary"
+                  id="cta-btn-browse"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage('opportunities');
+                  }}
+                >
                   Browse opportunities
                 </a>
               </div>

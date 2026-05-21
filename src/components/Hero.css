@@ -59,14 +59,12 @@
   letter-spacing: 0.2px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .trust-badge {
-    background-color: rgba(59, 130, 246, 0.1);
-    border-color: rgba(59, 130, 246, 0.2);
-  }
-  .badge-text {
-    color: #60a5fa;
-  }
+html.dark .trust-badge {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+html.dark .badge-text {
+  color: #60a5fa;
 }
 
 /* Hero Heading */
@@ -152,20 +150,18 @@
   box-shadow: var(--shadow-medium);
 }
 
-@media (prefers-color-scheme: dark) {
-  .btn-primary {
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-  }
-  .btn-primary:hover {
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
-  }
-  .btn-secondary {
-    border-color: var(--border-color);
-  }
-  .btn-secondary:hover {
-    border-color: #475569;
-    background-color: rgba(255, 255, 255, 0.02);
-  }
+html.dark .btn-primary {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+html.dark .btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.45);
+}
+html.dark .btn-secondary {
+  border-color: var(--border-color);
+}
+html.dark .btn-secondary:hover {
+  border-color: #475569;
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 /* Social Proof (Avatars & Stars) */
@@ -290,10 +286,8 @@
   to { transform: rotate(360deg); }
 }
 
-@media (prefers-color-scheme: dark) {
-  .orbit-circle {
-    border-color: rgba(255, 255, 255, 0.05);
-  }
+html.dark .orbit-circle {
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
 /* Colored accent dots */
@@ -391,10 +385,8 @@
   display: block;
 }
 
-@media (prefers-color-scheme: dark) {
-  .card-lines span {
-    background-color: #334155;
-  }
+html.dark .card-lines span {
+  background-color: #334155;
 }
 
 .line-long {
@@ -602,3 +594,25 @@
     height: 220px;
   }
 }
+
+/* Trust Badge SVG Pulse & Spin */
+.trust-badge svg {
+  animation: spin-pulse 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes spin-pulse {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.22) rotate(180deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 4px rgba(0, 102, 204, 0.45));
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 0.85;
+  }
+}
+

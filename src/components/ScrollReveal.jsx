@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import './ScrollReveal.css';
 
 export default function ScrollReveal({ children, className = '' }) {
   const [inView, setInView] = useState(false);

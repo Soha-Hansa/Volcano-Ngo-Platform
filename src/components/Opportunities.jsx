@@ -1,7 +1,7 @@
 import ScrollReveal from './ScrollReveal';
 import './Opportunities.css';
 
-export default function Opportunities() {
+export default function Opportunities({ setPage = () => {} }) {
   const opps = [
     {
       id: 1,
@@ -69,7 +69,15 @@ export default function Opportunities() {
             <span className="section-label">LIVE OPPORTUNITIES</span>
             <h2 className="section-title">Find something worth your time.</h2>
           </div>
-          <a href="#" className="see-all-link" id="see-all-opps">
+          <a
+            href="#"
+            className="see-all-link"
+            id="see-all-opps"
+            onClick={(e) => {
+              e.preventDefault();
+              setPage('opportunities');
+            }}
+          >
             <span>See all</span>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

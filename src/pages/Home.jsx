@@ -8,8 +8,9 @@ import Opportunities from '../components/Opportunities';
 import Testimonials from '../components/Testimonials';
 import Cta from '../components/Cta';
 import Footer from '../components/Footer';
+import './Home.css';
 
-export default function Home() {
+export default function Home({ setPage, theme, toggleTheme }) {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
@@ -29,17 +30,17 @@ export default function Home() {
       {/* Scroll Progress Indicator */}
       <div className="scroll-progress-bar" style={{ width: `${scrollProgress}%` }} id="scroll-progress-indicator"></div>
       
-      <Header />
+      <Header setPage={setPage} currentPage="home" theme={theme} toggleTheme={toggleTheme} />
       <main className="main-content">
-        <Hero />
+        <Hero setPage={setPage} />
         <Stats />
         <Features />
         <HowItWorks />
-        <Opportunities />
+        <Opportunities setPage={setPage} />
         <Testimonials />
-        <Cta />
+        <Cta setPage={setPage} />
       </main>
-      <Footer />
+      <Footer setPage={setPage} />
     </div>
   );
 }

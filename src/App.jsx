@@ -1,13 +1,107 @@
+import { useState, useEffect } from 'react';
 import Home from './pages/Home';
+import OppoPage from './pages/OppoPage';
+import DashboardUser from './pages/DashboardUser';
+import DashboardNgo from './pages/DashboardNgo';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import VolunteerProfile from './pages/VolunteerProfile';
+import NgoProfile from './pages/NgoProfile';
 import './App.css';
 
 function App() {
-  return 
-  <>
-   <Home />;
-   
-  </>
- 
+  const [page, setPage] = useState('home');
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  const [ngoData, setNgoData] = useState({
+    name: "Green Earth Initiative",
+    email: "contact@greenearth.org",
+    phone: "+91 22 2845 9900",
+    website: "https://greenearth.org",
+    category: "Climate & Environment",
+    address: "SGNP Office, Borivali East, Mumbai, Maharashtra 400066",
+    mission: "To restore native forest cover, protect coastal ecosystems, and raise environmental awareness through active community-led volunteering campaigns.",
+    team: [
+      { name: "Dr. Amit Patel", role: "Executive Director" },
+      { name: "Sarah Jenkins", role: "Head of Operations" }
+    ]
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      root.classList.remove('light');
+    } else {
+      root.classList.add('light');
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
+  return (
+    <>
+      {page === 'home' && (
+        <div className="page-transition">
+          <Home setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+        </div>
+      )}
+      {page === 'opportunities' && (
+        <div className="page-transition">
+          <OppoPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+        </div>
+      )}
+      {page === 'dashboard' && (
+        <div className="page-transition">
+          <DashboardUser setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+        </div>
+      )}
+      {page === 'dashboardNgo' && (
+        <div className="page-transition">
+          <DashboardNgo 
+            setPage={setPage} 
+            ngoData={ngoData} 
+            setNgoData={setNgoData} 
+            theme={theme}
+            toggleTheme={toggleTheme}
+          />
+        </div>
+      )}
+      {page === 'login' && (
+        <div className="page-transition">
+          <LoginPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+        </div>
+      )}
+      {page === 'signup' && (
+        <div className="page-transition">
+          <SignupPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+        </div>
+      )}
+      {page === 'volunteerProfile' && (
+        <div className="page-transition">
+          <VolunteerProfile setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+        </div>
+      )}
+      {page === 'ngoProfile' && (
+        <div className="page-transition">
+          <NgoProfile 
+            setPage={setPage} 
+            ngoData={ngoData} 
+            theme={theme}
+            toggleTheme={toggleTheme}
+          />
+        </div>
+      )}
+    </>
+  );
 }
 
 export default App;

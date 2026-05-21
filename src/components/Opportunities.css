@@ -47,14 +47,12 @@
   transform: translateX(4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  .see-all-link {
-    background-color: rgba(59, 130, 246, 0.1);
-    color: #60a5fa;
-  }
-  .see-all-link:hover {
-    background-color: rgba(59, 130, 246, 0.2);
-  }
+html.dark .see-all-link {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+}
+html.dark .see-all-link:hover {
+  background-color: rgba(59, 130, 246, 0.2);
 }
 
 .opps-grid {
@@ -117,15 +115,13 @@
   background-color: rgba(5, 150, 105, 0.08);
 }
 
-@media (prefers-color-scheme: dark) {
-  .type-skill-based {
-    color: #38bdf8;
-    background-color: rgba(56, 189, 248, 0.12);
-  }
-  .type-on-ground {
-    color: #34d399;
-    background-color: rgba(52, 211, 153, 0.12);
-  }
+html.dark .type-skill-based {
+  color: #38bdf8;
+  background-color: rgba(56, 189, 248, 0.12);
+}
+html.dark .type-on-ground {
+  color: #34d399;
+  background-color: rgba(52, 211, 153, 0.12);
 }
 
 .opp-role-title {
@@ -199,3 +195,33 @@
     gap: 16px;
   }
 }
+
+/* Shiny Sweep Effect on Opp Card Hover */
+.opp-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.opp-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.28) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.opp-card:hover::after {
+  left: 150%;
+}
+

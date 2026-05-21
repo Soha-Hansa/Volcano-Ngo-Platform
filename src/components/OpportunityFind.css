@@ -1,92 +1,182 @@
 .opportunities-container {
-  max-width: 900px;
-  margin: 40px auto;
-  text-align: center;
-  padding: 20px;
+  max-width: 1200px;
+  margin: 60px auto 100px auto;
+  padding: 0 24px;
+  box-sizing: border-box;
 }
 
-.section-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #555;
-  margin-bottom: 10px;
+.section-label {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
   text-transform: uppercase;
 }
 
 .main-heading {
-  font-size: 32px;
-  font-weight: bold;
-  margin: 10px 0;
-  color: #222;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-heading);
+  margin: 0 0 12px 0;
+  letter-spacing: -1px;
+  line-height: 1.2;
 }
 
 .sub-text {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 30px;
+  font-size: 1.05rem;
+  color: var(--text-main);
+  margin: 0 auto 40px auto;
+  max-width: 600px;
+  text-align: center;
 }
 
-.search-bar {
+/* Premium Search Bar Container */
+.search-bar-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 10px 16px;
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-subtle);
+  margin: 0 auto 50px auto;
+  max-width: 700px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.search-bar-container:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 12px 24px -10px rgba(0, 102, 204, 0.15);
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
   gap: 10px;
+  flex: 1.8;
+}
+
+.search-icon {
+  color: #94a3b8;
+  flex-shrink: 0;
 }
 
 .search-input {
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  color: var(--text-heading);
+  width: 100%;
+  font-family: inherit;
+  background: transparent;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.search-dropdown-wrapper {
+  display: flex;
+  align-items: center;
+  border-left: 1px solid var(--border-color);
+  padding-left: 16px;
   flex: 1;
-  max-width: 400px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 }
 
 .search-dropdown {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.search-button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 18px;
   border: none;
-  border-radius: 4px;
+  outline: none;
+  font-size: 0.925rem;
+  color: var(--text-main);
+  background: transparent;
+  width: 100%;
   cursor: pointer;
+  font-family: inherit;
+  padding-right: 12px;
 }
 
-.search-button:hover {
-  background-color: #0056b3;
-}
-
-/* --- Responsive Styles --- */
-@media (max-width: 768px) {
-  .search-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-input,
-  .search-dropdown,
-  .search-button {
-    width: 100%;
-  }
-
-  .search-button {
-    margin-top: 10px;
-  }
-
-  .main-heading {
-    font-size: 24px;
-  }
-
-  .section-title {
-    font-size: 16px;
-  }
-}
+/* Jobs Grid */
 .jobs-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 20px;
+  justify-content: flex-start;
+  margin-top: 20px;
+}
+
+/* Empty State / No Results */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  width: 100%;
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-results h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin: 0 0 8px 0;
+}
+
+.no-results p {
+  font-size: 0.95rem;
+  max-width: 420px;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.btn-reset {
+  background: var(--primary-light);
+  color: var(--primary-color);
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-reset:hover {
+  background: var(--primary-light-hover);
+  transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .opportunities-container {
+    margin: 40px auto 60px auto;
+  }
+  
+  .main-heading {
+    font-size: 2rem;
+  }
+  
+  .search-bar-container {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+    gap: 16px;
+    border-radius: 16px;
+  }
+  
+  .search-dropdown-wrapper {
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+    padding-left: 0;
+    padding-top: 16px;
+  }
+  
+  .jobs-grid {
+    justify-content: center;
+  }
 }
