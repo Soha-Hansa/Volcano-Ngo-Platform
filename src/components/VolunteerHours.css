@@ -44,6 +44,11 @@
   font-size: 11.5px;
 }
 
+.trend-badge.negative {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
 .chart-legend {
   display: flex;
   align-items: center;

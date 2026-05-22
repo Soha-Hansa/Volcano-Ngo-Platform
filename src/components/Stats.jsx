@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import ScrollReveal from './ScrollReveal';
 import './Stats.css';
 
 function Counter({ end, duration = 2000 }) {
@@ -65,17 +66,19 @@ export default function Stats() {
 
   return (
     <section className="stats-section" id="stats-section">
-      <div className="stats-container">
-        {statsData.map((stat) => (
-          <div key={stat.id} className="stat-card" id={`stat-${stat.id}`}>
-            <h2 className="stat-number">
-              <Counter end={stat.endVal} />
-              <span>+</span>
-            </h2>
-            <p className="stat-label">{stat.label}</p>
-          </div>
-        ))}
-      </div>
+      <ScrollReveal className="stats-reveal-wrapper">
+        <div className="stats-container">
+          {statsData.map((stat, index) => (
+            <div key={stat.id} className={`stat-card scroll-animate stagger-${index + 1}`} id={`stat-${stat.id}`}>
+              <h2 className="stat-number">
+                <Counter end={stat.endVal} />
+                <span>+</span>
+              </h2>
+              <p className="stat-label">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </ScrollReveal>
     </section>
   );
 }

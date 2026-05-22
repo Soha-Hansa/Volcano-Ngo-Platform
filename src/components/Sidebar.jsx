@@ -113,7 +113,7 @@ const Sidebar = ({ setPage = () => {}, currentPage = 'dashboard', onTabChange, m
       <div className="sidebar-user-profile">
         <div className="user-avatar-wrapper">
           {profile.avatar ? (
-            <img src={profile.avatar} alt={profile.name} className="user-avatar-img" />
+            <img src={profile.avatar} alt={profile.name} className="user-avatar-img" loading="lazy" />
           ) : (
             <div className="ngo-logo-fallback">{profile.fallbackText || getInitials(profile.name) || "PS"}</div>
           )}

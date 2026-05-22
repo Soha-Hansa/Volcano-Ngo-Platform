@@ -1,3 +1,4 @@
+import ScrollReveal from './ScrollReveal';
 import './Features.css';
 
 export default function Features() {
@@ -82,10 +83,10 @@ export default function Features() {
 
   return (
     <section className="features-section" id="features-section">
-      <div className="features-container">
+      <ScrollReveal className="features-container">
         
         {/* Heading Section */}
-        <div className="features-header">
+        <div className="features-header scroll-animate stagger-1">
           <h2 className="features-title">
             Everything an NGO and a volunteer needs — <span className="gradient-text">nothing they don't.</span>
           </h2>
@@ -93,8 +94,8 @@ export default function Features() {
 
         {/* Features Grid */}
         <div className="features-grid">
-          {featuresData.map((feature) => (
-            <div key={feature.id} className="feature-card" id={`feature-card-${feature.id}`}>
+          {featuresData.map((feature, index) => (
+            <div key={feature.id} className={`feature-card scroll-animate stagger-${index + 2}`} id={`feature-card-${feature.id}`}>
               {/* Card Hover Glow Backdrops */}
               <div className={`card-glow-bg glow-${feature.iconColor}`}></div>
               
@@ -112,7 +113,7 @@ export default function Features() {
           ))}
         </div>
 
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

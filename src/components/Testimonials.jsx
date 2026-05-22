@@ -62,7 +62,7 @@ export default function Testimonials() {
                 {/* Author Block */}
                 <div className="testimonial-author">
                   <div className="author-avatar">
-                    <img src={test.avatar} alt={test.author} className="author-img" />
+                    <img src={test.avatar} alt={test.author} className="author-img" loading="lazy" />
                   </div>
                   <div className="author-info">
                     <h4 className="author-name">{test.author}</h4>

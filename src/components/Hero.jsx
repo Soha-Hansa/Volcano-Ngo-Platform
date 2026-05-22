@@ -16,7 +16,7 @@ export default function Hero({ setPage = () => {} }) {
         {/* Left Content Column */}
         <div className="hero-content">
           {/* Trust Badge */}
-          <div className="trust-badge" id="trust-badge">
+          <div className="trust-badge animate-fade-in-up stagger-1" id="trust-badge">
             <svg
               width="16"
               height="16"
@@ -34,17 +34,17 @@ export default function Hero({ setPage = () => {} }) {
           </div>
 
           {/* Heading */}
-          <h1 className="hero-heading">
+          <h1 className="hero-heading animate-fade-in-up stagger-2">
             Connect skills with <span className="gradient-text">social impact.</span>
           </h1>
 
           {/* Paragraph */}
-          <p className="hero-description">
+          <p className="hero-description animate-fade-in-up stagger-3">
             Volcano is where talented volunteers meet verified NGOs. Match with causes you care about, contribute hours that count, and watch your impact grow — all in one calm, modern workspace.
           </p>
 
           {/* Action Buttons */}
-          <div className="hero-actions">
+          <div className="hero-actions animate-fade-in-up stagger-4">
             <button className="btn-primary" id="btn-join-volunteer" onClick={() => setPage('opportunities')}>
               <span>Join as Volunteer</span>
               <svg
@@ -71,7 +71,7 @@ export default function Hero({ setPage = () => {} }) {
           </div>
 
           {/* Social Proof */}
-          <div className="social-proof" id="social-proof-section">
+          <div className="social-proof animate-fade-in-up stagger-5" id="social-proof-section">
             <div className="avatar-pile">
               {avatars.map((avatar) => (
                 <div key={avatar.id} className="avatar-circle">
@@ -107,7 +107,7 @@ export default function Hero({ setPage = () => {} }) {
         </div>
 
         {/* Right Graphic Column */}
-        <div className="hero-graphic-col">
+        <div className="hero-graphic-col animate-fade-in stagger-6">
           <div className="graphic-wrapper">
             {/* Background Radial Glow */}
             <div className="radial-glow"></div>

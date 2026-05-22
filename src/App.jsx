@@ -1,13 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import Home from './pages/Home';
-import OppoPage from './pages/OppoPage';
-import DashboardUser from './pages/DashboardUser';
-import DashboardNgo from './pages/DashboardNgo';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import VolunteerProfile from './pages/VolunteerProfile';
-import NgoProfile from './pages/NgoProfile';
 import './App.css';
+
+// Lazy load secondary/interior pages to optimize initial bundle load time
+const OppoPage = lazy(() => import('./pages/OppoPage'));
+const DashboardUser = lazy(() => import('./pages/DashboardUser'));
+const DashboardNgo = lazy(() => import('./pages/DashboardNgo'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const SignupPage = lazy(() => import('./pages/SignupPage'));
+const VolunteerProfile = lazy(() => import('./pages/VolunteerProfile'));
+const NgoProfile = lazy(() => import('./pages/NgoProfile'));
+
+// Premium, glassmorphic fallback loader
+const PageLoader = () => (
+  <div className="page-loader-container">
+    <div className="page-loader-inner">
+      <div className="page-loader-glow"></div>
+      <div className="page-loader-spinner"></div>
+      <p className="page-loader-text">Loading Volcano...</p>
+    </div>
+  </div>
+);
 
 function App() {
   const [page, setPage] = useState('home');
@@ -54,52 +67,55 @@ function App() {
           <Home setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
         </div>
       )}
-      {page === 'opportunities' && (
-        <div className="page-transition">
-          <OppoPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
-        </div>
-      )}
-      {page === 'dashboard' && (
-        <div className="page-transition">
-          <DashboardUser setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
-        </div>
-      )}
-      {page === 'dashboardNgo' && (
-        <div className="page-transition">
-          <DashboardNgo 
-            setPage={setPage} 
-            ngoData={ngoData} 
-            setNgoData={setNgoData} 
-            theme={theme}
-            toggleTheme={toggleTheme}
-          />
-        </div>
-      )}
-      {page === 'login' && (
-        <div className="page-transition">
-          <LoginPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
-        </div>
-      )}
-      {page === 'signup' && (
-        <div className="page-transition">
-          <SignupPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
-        </div>
-      )}
-      {page === 'volunteerProfile' && (
-        <div className="page-transition">
-          <VolunteerProfile setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
-        </div>
-      )}
-      {page === 'ngoProfile' && (
-        <div className="page-transition">
-          <NgoProfile 
-            setPage={setPage} 
-            ngoData={ngoData} 
-            theme={theme}
-            toggleTheme={toggleTheme}
-          />
-        </div>
-      )}
+      
+      <Suspense fallback={<PageLoader />}>
+        {page === 'opportunities' && (
+          <div className="page-transition">
+            <OppoPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+          </div>
+        )}
+        {page === 'dashboard' && (
+          <div className="page-transition">
+            <DashboardUser setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+          </div>
+        )}
+        {page === 'dashboardNgo' && (
+          <div className="page-transition">
+            <DashboardNgo 
+              setPage={setPage} 
+              ngoData={ngoData} 
+              setNgoData={setNgoData} 
+              theme={theme}
+              toggleTheme={toggleTheme}
+            />
+          </div>
+        )}
+        {page === 'login' && (
+          <div className="page-transition">
+            <LoginPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+          </div>
+        )}
+        {page === 'signup' && (
+          <div className="page-transition">
+            <SignupPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+          </div>
+        )}
+        {page === 'volunteerProfile' && (
+          <div className="page-transition">
+            <VolunteerProfile setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+          </div>
+        )}
+        {page === 'ngoProfile' && (
+          <div className="page-transition">
+            <NgoProfile 
+              setPage={setPage} 
+              ngoData={ngoData} 
+              theme={theme}
+              toggleTheme={toggleTheme}
+            />
+          </div>
+        )}
+      </Suspense>
     </>
   );
 }

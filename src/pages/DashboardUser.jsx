@@ -209,7 +209,7 @@ const DashboardUser = ({ setPage = () => { }, theme, toggleTheme }) => {
                         </header>
 
                         {activeTab === "dashboard" && (
-                            <>
+                            <div className="dashboard-view-transition">
                                 {/* Stats Row Grid */}
                                 <section className="stats-row">
                                     <StatsCard
@@ -256,381 +256,389 @@ const DashboardUser = ({ setPage = () => { }, theme, toggleTheme }) => {
                                         <UpcomingEvents />
                                     </div>
                                 </section>
-                            </>
+                            </div>
                         )}
 
                         {activeTab === "calendar" && (
-                            <section className="dashboard-subview calendar-view-container">
-                                <div className="subview-header">
-                                    <h3>Volunteer Calendar</h3>
-                                    <p>Track your registered campaigns and upcoming duty shifts.</p>
-                                </div>
-                                <div className="calendar-content-grid">
-                                    <div className="calendar-card">
-                                        <div className="calendar-header-row">
-                                            <h4>{calendarMonth}</h4>
-                                            <div className="calendar-nav-buttons">
-                                                <button disabled>&lt;</button>
-                                                <button disabled>&gt;</button>
+                            <div className="dashboard-view-transition">
+                                <section className="dashboard-subview calendar-view-container">
+                                    <div className="subview-header">
+                                        <h3>Volunteer Calendar</h3>
+                                        <p>Track your registered campaigns and upcoming duty shifts.</p>
+                                    </div>
+                                    <div className="calendar-content-grid">
+                                        <div className="calendar-card">
+                                            <div className="calendar-header-row">
+                                                <h4>{calendarMonth}</h4>
+                                                <div className="calendar-nav-buttons">
+                                                    <button disabled>&lt;</button>
+                                                    <button disabled>&gt;</button>
+                                                </div>
+                                            </div>
+                                            <div className="calendar-weekdays">
+                                                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                                            </div>
+                                            <div className="calendar-days-grid">
+                                                {renderCalendarGrid()}
                                             </div>
                                         </div>
-                                        <div className="calendar-weekdays">
-                                            <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-                                        </div>
-                                        <div className="calendar-days-grid">
-                                            {renderCalendarGrid()}
-                                        </div>
-                                    </div>
-                                    <div className="calendar-details-card">
-                                        <h4>Schedule for Feb {selectedDate}</h4>
-                                        {calendarEvents[selectedDate] ? (
-                                            <div className="event-details-active">
-                                                <span className="event-type-badge">{calendarEvents[selectedDate].type}</span>
-                                                <h5>{calendarEvents[selectedDate].title}</h5>
-                                                <div className="detail-row">
-                                                    <strong>Time:</strong>
-                                                    <span>{calendarEvents[selectedDate].time}</span>
+                                        <div className="calendar-details-card">
+                                            <h4>Schedule for Feb {selectedDate}</h4>
+                                            {calendarEvents[selectedDate] ? (
+                                                <div className="event-details-active">
+                                                    <span className="event-type-badge">{calendarEvents[selectedDate].type}</span>
+                                                    <h5>{calendarEvents[selectedDate].title}</h5>
+                                                    <div className="detail-row">
+                                                        <strong>Time:</strong>
+                                                        <span>{calendarEvents[selectedDate].time}</span>
+                                                    </div>
+                                                    <div className="detail-row">
+                                                        <strong>Location:</strong>
+                                                        <span>{calendarEvents[selectedDate].location}</span>
+                                                    </div>
+                                                    <p className="event-desc-text">{calendarEvents[selectedDate].description}</p>
+                                                    <div className="event-status-row">
+                                                        <span className={`status-text ${calendarEvents[selectedDate].status.toLowerCase().replace(" ", "-")}`}>
+                                                            ● {calendarEvents[selectedDate].status}
+                                                        </span>
+                                                        <button className="btn-event-action">
+                                                            {calendarEvents[selectedDate].buttonAction}
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                                <div className="detail-row">
-                                                    <strong>Location:</strong>
-                                                    <span>{calendarEvents[selectedDate].location}</span>
-                                                </div>
-                                                <p className="event-desc-text">{calendarEvents[selectedDate].description}</p>
-                                                <div className="event-status-row">
-                                                    <span className={`status-text ${calendarEvents[selectedDate].status.toLowerCase().replace(" ", "-")}`}>
-                                                        ● {calendarEvents[selectedDate].status}
-                                                    </span>
-                                                    <button className="btn-event-action">
-                                                        {calendarEvents[selectedDate].buttonAction}
+                                            ) : (
+                                                <div className="event-details-empty">
+                                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                                        <circle cx="12" cy="12" r="10" />
+                                                        <line x1="12" y1="8" x2="12" y2="16" />
+                                                        <line x1="8" y1="12" x2="16" y2="12" />
+                                                    </svg>
+                                                    <p>No volunteering tasks scheduled for this day.</p>
+                                                    <button className="btn-opportunities-redirect" onClick={() => setPage('opportunities')}>
+                                                        Find Opportunities
                                                     </button>
                                                 </div>
-                                            </div>
-                                        ) : (
-                                            <div className="event-details-empty">
-                                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                                    <circle cx="12" cy="12" r="10" />
-                                                    <line x1="12" y1="8" x2="12" y2="16" />
-                                                    <line x1="8" y1="12" x2="16" y2="12" />
-                                                </svg>
-                                                <p>No volunteering tasks scheduled for this day.</p>
-                                                <button className="btn-opportunities-redirect" onClick={() => setPage('opportunities')}>
-                                                    Find Opportunities
-                                                </button>
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            </section>
+                                </section>
+                            </div>
                         )}
 
                         {activeTab === "achievements" && (
-                            <section className="dashboard-subview achievements-view-container">
-                                <div className="subview-header">
-                                    <h3>Volunteer Achievements</h3>
-                                    <p>Celebrate your commitment. You earn badges as you help the community.</p>
-                                </div>
-                                <div className="achievements-summary-card">
-                                    <div className="summary-text-col">
-                                        <h4>Level 4 Volunteer</h4>
-                                        <p>You have contributed <strong>184 hours</strong>. Just 16 more hours to reach Level 5!</p>
-                                        <div className="progress-bar-container">
-                                            <div className="progress-bar-fill" style={{ width: "92%" }}></div>
-                                        </div>
-                                        <span className="progress-bar-label">184 / 200 hours logged</span>
+                            <div className="dashboard-view-transition">
+                                <section className="dashboard-subview achievements-view-container">
+                                    <div className="subview-header">
+                                        <h3>Volunteer Achievements</h3>
+                                        <p>Celebrate your commitment. You earn badges as you help the community.</p>
                                     </div>
-                                    <div className="summary-stats-col">
-                                        <div className="badge-count-card">
-                                            <span className="badge-icon-large">🏆</span>
-                                            <div>
-                                                <h5>7 Badges</h5>
-                                                <span>5 active / 2 locked</span>
+                                    <div className="achievements-summary-card">
+                                        <div className="summary-text-col">
+                                            <h4>Level 4 Volunteer</h4>
+                                            <p>You have contributed <strong>184 hours</strong>. Just 16 more hours to reach Level 5!</p>
+                                            <div className="progress-bar-container">
+                                                <div className="progress-bar-fill" style={{ width: "92%" }}></div>
+                                            </div>
+                                            <span className="progress-bar-label">184 / 200 hours logged</span>
+                                        </div>
+                                        <div className="summary-stats-col">
+                                            <div className="badge-count-card">
+                                                <span className="badge-icon-large">🏆</span>
+                                                <div>
+                                                    <h5>7 Badges</h5>
+                                                    <span>5 active / 2 locked</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="badges-grid-list">
-                                    {achievementsList.map(b => (
-                                        <div key={b.id} className={`badge-card-item ${b.status.toLowerCase().replace(" ", "-")}`}>
-                                            <div className="badge-icon-wrapper" style={{ backgroundColor: `${b.color}15`, color: b.color }}>
-                                                <span className="badge-icon-symbol">{b.icon}</span>
-                                            </div>
-                                            <div className="badge-info-details">
-                                                <h5>{b.name}</h5>
-                                                <p>{b.desc}</p>
-                                                {b.status === "In Progress" && (
-                                                    <div className="badge-progress-mini">
-                                                        <div className="progress-mini-bar">
-                                                            <div className="progress-mini-fill" style={{ width: `${b.progress}%`, backgroundColor: b.color }}></div>
+                                    <div className="badges-grid-list">
+                                        {achievementsList.map(b => (
+                                            <div key={b.id} className={`badge-card-item ${b.status.toLowerCase().replace(" ", "-")}`}>
+                                                <div className="badge-icon-wrapper" style={{ backgroundColor: `${b.color}15`, color: b.color }}>
+                                                    <span className="badge-icon-symbol">{b.icon}</span>
+                                                </div>
+                                                <div className="badge-info-details">
+                                                    <h5>{b.name}</h5>
+                                                    <p>{b.desc}</p>
+                                                    {b.status === "In Progress" && (
+                                                        <div className="badge-progress-mini">
+                                                            <div className="progress-mini-bar">
+                                                                <div className="progress-mini-fill" style={{ width: `${b.progress}%`, backgroundColor: b.color }}></div>
+                                                            </div>
+                                                            <span className="progress-mini-text">{b.current} / {b.target} hours</span>
                                                         </div>
-                                                        <span className="progress-mini-text">{b.current} / {b.target} hours</span>
-                                                    </div>
-                                                )}
-                                                {b.status === "Locked" && (
-                                                    <span className="badge-status-tag locked">Locked</span>
-                                                )}
-                                                {b.status === "Earned" && (
-                                                    <span className="badge-status-tag earned">Earned</span>
-                                                )}
+                                                    )}
+                                                    {b.status === "Locked" && (
+                                                        <span className="badge-status-tag locked">Locked</span>
+                                                    )}
+                                                    {b.status === "Earned" && (
+                                                        <span className="badge-status-tag earned">Earned</span>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
+                                        ))}
+                                    </div>
+                                </section>
+                            </div>
                         )}
 
                         {activeTab === "profile" && (
-                            <section className="dashboard-subview profile-view-container">
-                                <div className="subview-header">
-                                    <h3>Volunteer Profile</h3>
-                                    <p>Manage your public info, volunteer bio, expertise, and target cause interests.</p>
-                                </div>
-                                <div className="profile-content-cols">
-                                    <div className="profile-left-card">
-                                        <div className="profile-avatar-wrapper">
-                                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&fit=crop&crop=faces&auto=format&q=80" alt="Priya Sharma" />
-                                            <button className="btn-change-avatar" onClick={() => alert("Simulation: Upload new profile photo")}>
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            <div className="dashboard-view-transition">
+                                <section className="dashboard-subview profile-view-container">
+                                    <div className="subview-header">
+                                        <h3>Volunteer Profile</h3>
+                                        <p>Manage your public info, volunteer bio, expertise, and target cause interests.</p>
+                                    </div>
+                                    <div className="profile-content-cols">
+                                        <div className="profile-left-card">
+                                            <div className="profile-avatar-wrapper">
+                                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&fit=crop&crop=faces&auto=format&q=80" alt="Priya Sharma" loading="lazy" />
+                                                <button className="btn-change-avatar" onClick={() => alert("Simulation: Upload new profile photo")}>
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                                                </button>
+                                            </div>
+                                            <h4>{profileData.name}</h4>
+                                            <span className="profile-tag-sub">Active Volunteer</span>
+                                            <p className="profile-since">Member since October 2024</p>
+                                            <div className="quick-points-box">
+                                                <div className="q-point">⭐ 4.9 Volunteer Rating</div>
+                                                <div className="q-point">⚡ 100% Attendance Rate</div>
+                                            </div>
+                                            <button 
+                                                type="button" 
+                                                className="btn-view-public-profile" 
+                                                onClick={() => setPage("volunteerProfile")}
+                                                style={{
+                                                    marginTop: '20px',
+                                                    width: '100%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '8px',
+                                                    background: 'var(--primary-light)',
+                                                    color: 'var(--primary-color)',
+                                                    padding: '10px 16px',
+                                                    borderRadius: '8px',
+                                                    fontWeight: '600',
+                                                    fontSize: '13px',
+                                                    border: '1px solid transparent',
+                                                    transition: 'all 0.2s ease'
+                                                }}
+                                                onMouseEnter={(e) => {
+                                                    e.currentTarget.style.background = 'var(--primary-light-hover)';
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.background = 'var(--primary-light)';
+                                                }}
+                                            >
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                                    <circle cx="12" cy="12" r="3" />
+                                                </svg>
+                                                View Public Profile
                                             </button>
                                         </div>
-                                        <h4>{profileData.name}</h4>
-                                        <span className="profile-tag-sub">Active Volunteer</span>
-                                        <p className="profile-since">Member since October 2024</p>
-                                        <div className="quick-points-box">
-                                            <div className="q-point">⭐ 4.9 Volunteer Rating</div>
-                                            <div className="q-point">⚡ 100% Attendance Rate</div>
-                                        </div>
-                                        <button 
-                                            type="button" 
-                                            className="btn-view-public-profile" 
-                                            onClick={() => setPage("volunteerProfile")}
-                                            style={{
-                                                marginTop: '20px',
-                                                width: '100%',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                gap: '8px',
-                                                background: 'var(--primary-light)',
-                                                color: 'var(--primary-color)',
-                                                padding: '10px 16px',
-                                                borderRadius: '8px',
-                                                fontWeight: '600',
-                                                fontSize: '13px',
-                                                border: '1px solid transparent',
-                                                transition: 'all 0.2s ease'
-                                            }}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.background = 'var(--primary-light-hover)';
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.background = 'var(--primary-light)';
-                                            }}
-                                        >
-                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                                <circle cx="12" cy="12" r="3" />
-                                            </svg>
-                                            View Public Profile
-                                        </button>
-                                    </div>
-                                    <div className="profile-right-form-card">
-                                        {saveStatus && (
-                                            <div className="toast-success-message">
-                                                {saveStatus}
-                                            </div>
-                                        )}
-                                        <form onSubmit={handleSaveProfile} className="profile-edit-form">
-                                            <div className="form-row">
-                                                <div className="form-group-item">
-                                                    <label>Full Name</label>
-                                                    <input
-                                                        type="text"
-                                                        value={profileData.name}
-                                                        onChange={e => setProfileData({ ...profileData, name: e.target.value })}
-                                                        required
-                                                    />
+                                        <div className="profile-right-form-card">
+                                            {saveStatus && (
+                                                <div className="toast-success-message">
+                                                    {saveStatus}
                                                 </div>
-                                                <div className="form-group-item">
-                                                    <label>Email Address</label>
-                                                    <input
-                                                        type="email"
-                                                        value={profileData.email}
-                                                        onChange={e => setProfileData({ ...profileData, email: e.target.value })}
-                                                        required
-                                                    />
+                                            )}
+                                            <form onSubmit={handleSaveProfile} className="profile-edit-form">
+                                                <div className="form-row">
+                                                    <div className="form-group-item">
+                                                        <label>Full Name</label>
+                                                        <input
+                                                            type="text"
+                                                            value={profileData.name}
+                                                            onChange={e => setProfileData({ ...profileData, name: e.target.value })}
+                                                            required
+                                                        />
+                                                    </div>
+                                                    <div className="form-group-item">
+                                                        <label>Email Address</label>
+                                                        <input
+                                                            type="email"
+                                                            value={profileData.email}
+                                                            onChange={e => setProfileData({ ...profileData, email: e.target.value })}
+                                                            required
+                                                        />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="form-row">
+                                                <div className="form-row">
+                                                    <div className="form-group-item full-width">
+                                                        <label>Phone Number</label>
+                                                        <input
+                                                            type="text"
+                                                            value={profileData.phone}
+                                                            onChange={e => setProfileData({ ...profileData, phone: e.target.value })}
+                                                        />
+                                                    </div>
+                                                </div>
                                                 <div className="form-group-item full-width">
-                                                    <label>Phone Number</label>
-                                                    <input
-                                                        type="text"
-                                                        value={profileData.phone}
-                                                        onChange={e => setProfileData({ ...profileData, phone: e.target.value })}
-                                                    />
+                                                    <label>Bio / Description</label>
+                                                    <textarea
+                                                        rows="3"
+                                                        value={profileData.bio}
+                                                        onChange={e => setProfileData({ ...profileData, bio: e.target.value })}
+                                                    ></textarea>
                                                 </div>
-                                            </div>
-                                            <div className="form-group-item full-width">
-                                                <label>Bio / Description</label>
-                                                <textarea
-                                                    rows="3"
-                                                    value={profileData.bio}
-                                                    onChange={e => setProfileData({ ...profileData, bio: e.target.value })}
-                                                ></textarea>
-                                            </div>
 
-                                            <div className="skills-tags-section">
-                                                <label>My Skills</label>
-                                                <div className="skills-tags-container">
-                                                    {profileData.skills.map(s => (
-                                                        <span key={s} className="skill-tag-pill">
-                                                            {s}
-                                                            <button type="button" onClick={() => handleRemoveSkill(s)} className="btn-remove-tag">&times;</button>
-                                                        </span>
-                                                    ))}
+                                                <div className="skills-tags-section">
+                                                    <label>My Skills</label>
+                                                    <div className="skills-tags-container">
+                                                        {profileData.skills.map(s => (
+                                                            <span key={s} className="skill-tag-pill">
+                                                                {s}
+                                                                <button type="button" onClick={() => handleRemoveSkill(s)} className="btn-remove-tag">&times;</button>
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                    <div className="add-skill-bar">
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Add a new skill..."
+                                                            value={newSkill}
+                                                            onChange={e => setNewSkill(e.target.value)}
+                                                        />
+                                                        <button type="button" onClick={handleAddSkill} className="btn-add-skill-action">Add</button>
+                                                    </div>
                                                 </div>
-                                                <div className="add-skill-bar">
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Add a new skill..."
-                                                        value={newSkill}
-                                                        onChange={e => setNewSkill(e.target.value)}
-                                                    />
-                                                    <button type="button" onClick={handleAddSkill} className="btn-add-skill-action">Add</button>
-                                                </div>
-                                            </div>
 
-                                            <div className="interests-section">
-                                                <label>Causes I Support</label>
-                                                <div className="interests-options-grid">
-                                                    {["Environment", "Education", "Healthcare", "Disaster Relief", "Animal Welfare", "Elderly Care"].map(interest => {
-                                                        const isSelected = profileData.interests.includes(interest);
-                                                        return (
-                                                            <button
-                                                                key={interest}
-                                                                type="button"
-                                                                className={`interest-select-btn ${isSelected ? "selected" : ""}`}
-                                                                onClick={() => handleToggleInterest(interest)}
-                                                            >
-                                                                {interest}
-                                                            </button>
-                                                        );
-                                                    })}
+                                                <div className="interests-section">
+                                                    <label>Causes I Support</label>
+                                                    <div className="interests-options-grid">
+                                                        {["Environment", "Education", "Healthcare", "Disaster Relief", "Animal Welfare", "Elderly Care"].map(interest => {
+                                                            const isSelected = profileData.interests.includes(interest);
+                                                            return (
+                                                                <button
+                                                                    key={interest}
+                                                                    type="button"
+                                                                    className={`interest-select-btn ${isSelected ? "selected" : ""}`}
+                                                                    onClick={() => handleToggleInterest(interest)}
+                                                                >
+                                                                    {interest}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div className="form-actions-row">
-                                                <button type="submit" className="btn-submit-profile">Save Changes</button>
-                                            </div>
-                                        </form>
+                                                <div className="form-actions-row">
+                                                    <button type="submit" className="btn-submit-profile">Save Changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
-                            </section>
+                                </section>
+                            </div>
                         )}
 
                         {activeTab === "settings" && (
-                            <section className="dashboard-subview settings-view-container">
-                                <div className="subview-header">
-                                    <h3>Account Settings</h3>
-                                    <p>Adjust notification channels, privacy parameters, and preferences.</p>
-                                </div>
-                                <div className="settings-options-cols">
-                                    <div className="settings-card-group">
-                                        <h4>Notifications Preferences</h4>
-                                        <div className="setting-toggle-row">
-                                            <div className="toggle-info">
-                                                <h5>Email Campaigns Notifications</h5>
-                                                <p>Receive updates when new volunteer events matching your skills are posted.</p>
-                                            </div>
-                                            <label className="switch-toggle-label">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={settings.emailAlerts}
-                                                    onChange={e => setSettings({ ...settings, emailAlerts: e.target.checked })}
-                                                />
-                                                <span className="slider-round-toggle"></span>
-                                            </label>
-                                        </div>
-                                        <div className="setting-toggle-row">
-                                            <div className="toggle-info">
-                                                <h5>Weekly Impact Digest</h5>
-                                                <p>Get a summary email of hours contributed, badges earned, and community milestones.</p>
-                                            </div>
-                                            <label className="switch-toggle-label">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={settings.weeklyDigest}
-                                                    onChange={e => setSettings({ ...settings, weeklyDigest: e.target.checked })}
-                                                />
-                                                <span className="slider-round-toggle"></span>
-                                            </label>
-                                        </div>
-                                        <div className="setting-toggle-row">
-                                            <div className="toggle-info">
-                                                <h5>SMS Alerts</h5>
-                                                <p>Receive reminders on your phone 2 hours before your scheduled shifts.</p>
-                                            </div>
-                                            <label className="switch-toggle-label">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={settings.smsNotifications}
-                                                    onChange={e => setSettings({ ...settings, smsNotifications: e.target.checked })}
-                                                />
-                                                <span className="slider-round-toggle"></span>
-                                            </label>
-                                        </div>
+                            <div className="dashboard-view-transition">
+                                <section className="dashboard-subview settings-view-container">
+                                    <div className="subview-header">
+                                        <h3>Account Settings</h3>
+                                        <p>Adjust notification channels, privacy parameters, and preferences.</p>
                                     </div>
+                                    <div className="settings-options-cols">
+                                        <div className="settings-card-group">
+                                            <h4>Notifications Preferences</h4>
+                                            <div className="setting-toggle-row">
+                                                <div className="toggle-info">
+                                                    <h5>Email Campaigns Notifications</h5>
+                                                    <p>Receive updates when new volunteer events matching your skills are posted.</p>
+                                                </div>
+                                                <label className="switch-toggle-label">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={settings.emailAlerts}
+                                                        onChange={e => setSettings({ ...settings, emailAlerts: e.target.checked })}
+                                                    />
+                                                    <span className="slider-round-toggle"></span>
+                                                </label>
+                                            </div>
+                                            <div className="setting-toggle-row">
+                                                <div className="toggle-info">
+                                                    <h5>Weekly Impact Digest</h5>
+                                                    <p>Get a summary email of hours contributed, badges earned, and community milestones.</p>
+                                                </div>
+                                                <label className="switch-toggle-label">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={settings.weeklyDigest}
+                                                        onChange={e => setSettings({ ...settings, weeklyDigest: e.target.checked })}
+                                                    />
+                                                    <span className="slider-round-toggle"></span>
+                                                </label>
+                                            </div>
+                                            <div className="setting-toggle-row">
+                                                <div className="toggle-info">
+                                                    <h5>SMS Alerts</h5>
+                                                    <p>Receive reminders on your phone 2 hours before your scheduled shifts.</p>
+                                                </div>
+                                                <label className="switch-toggle-label">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={settings.smsNotifications}
+                                                        onChange={e => setSettings({ ...settings, smsNotifications: e.target.checked })}
+                                                    />
+                                                    <span className="slider-round-toggle"></span>
+                                                </label>
+                                            </div>
+                                        </div>
 
-                                    <div className="settings-card-group">
-                                        <h4>Privacy & Safety</h4>
-                                        <div className="setting-toggle-row">
-                                            <div className="toggle-info">
-                                                <h5>Public Profile Searchability</h5>
-                                                <p>Allow certified NGOs to view your profile, contact details, and invite you to programs.</p>
+                                        <div className="settings-card-group">
+                                            <h4>Privacy & Safety</h4>
+                                            <div className="setting-toggle-row">
+                                                <div className="toggle-info">
+                                                    <h5>Public Profile Searchability</h5>
+                                                    <p>Allow certified NGOs to view your profile, contact details, and invite you to programs.</p>
+                                                </div>
+                                                <label className="switch-toggle-label">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={settings.publicProfile}
+                                                        onChange={e => setSettings({ ...settings, publicProfile: e.target.checked })}
+                                                    />
+                                                    <span className="slider-round-toggle"></span>
+                                                </label>
                                             </div>
-                                            <label className="switch-toggle-label">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={settings.publicProfile}
-                                                    onChange={e => setSettings({ ...settings, publicProfile: e.target.checked })}
-                                                />
-                                                <span className="slider-round-toggle"></span>
-                                            </label>
-                                        </div>
-                                        <div className="setting-toggle-row">
-                                            <div className="toggle-info">
-                                                <h5>Show Achievements Badges</h5>
-                                                <p>Display your earned trophies and Level status on the NGO finder results page.</p>
+                                            <div className="setting-toggle-row">
+                                                <div className="toggle-info">
+                                                    <h5>Show Achievements Badges</h5>
+                                                    <p>Display your earned trophies and Level status on the NGO finder results page.</p>
+                                                </div>
+                                                <label className="switch-toggle-label">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={settings.showBadges}
+                                                        onChange={e => setSettings({ ...settings, showBadges: e.target.checked })}
+                                                    />
+                                                    <span className="slider-round-toggle"></span>
+                                                </label>
                                             </div>
-                                            <label className="switch-toggle-label">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={settings.showBadges}
-                                                    onChange={e => setSettings({ ...settings, showBadges: e.target.checked })}
-                                                />
-                                                <span className="slider-round-toggle"></span>
-                                            </label>
-                                        </div>
-                                        <div className="settings-danger-actions">
-                                            <h5>Critical Actions</h5>
-                                            <p>Permanently clean data, reset dashboard status, or deactivate user account.</p>
-                                            <div className="danger-buttons-row">
-                                                <button type="button" className="btn-danger-action reset" onClick={() => alert("Simulation: Resetting all dashboard statistics to initial state")}>
-                                                    Reset Data
-                                                </button>
-                                                <button type="button" className="btn-danger-action delete" onClick={() => {
-                                                    if (confirm("Are you sure you want to deactivate your Volcano Account? This action is irreversible.")) {
-                                                        alert("Simulation: Profile deactivated. Redirecting to home.");
-                                                        setPage("home");
-                                                    }
-                                                }}>
-                                                    Deactivate Account
-                                                </button>
+                                            <div className="settings-danger-actions">
+                                                <h5>Critical Actions</h5>
+                                                <p>Permanently clean data, reset dashboard status, or deactivate user account.</p>
+                                                <div className="danger-buttons-row">
+                                                    <button type="button" className="btn-danger-action reset" onClick={() => alert("Simulation: Resetting all dashboard statistics to initial state")}>
+                                                        Reset Data
+                                                    </button>
+                                                    <button type="button" className="btn-danger-action delete" onClick={() => {
+                                                        if (confirm("Are you sure you want to deactivate your Volcano Account? This action is irreversible.")) {
+                                                            alert("Simulation: Profile deactivated. Redirecting to home.");
+                                                            setPage("home");
+                                                        }
+                                                    }}>
+                                                        Deactivate Account
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </section>
+                                </section>
+                            </div>
                         )}
                     </div>
                 </div>

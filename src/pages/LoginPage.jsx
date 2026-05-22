@@ -143,10 +143,10 @@ const LoginPage = ({ setPage = () => {}, theme, toggleTheme }) => {
 
                 <div className="testimonial-wrapper">
                     <div className="avatars">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&fit=crop&crop=faces&auto=format&q=80" alt="user1" />
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&fit=crop&crop=faces&auto=format&q=80" alt="user2" />
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&fit=crop&crop=faces&auto=format&q=80" alt="user3" />
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&fit=crop&crop=faces&auto=format&q=80" alt="user4" />
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&fit=crop&crop=faces&auto=format&q=80" alt="user1" loading="lazy" />
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&fit=crop&crop=faces&auto=format&q=80" alt="user2" loading="lazy" />
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&fit=crop&crop=faces&auto=format&q=80" alt="user3" loading="lazy" />
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&fit=crop&crop=faces&auto=format&q=80" alt="user4" loading="lazy" />
                         <div className="circle">+18k</div>
                     </div>
                     <blockquote>

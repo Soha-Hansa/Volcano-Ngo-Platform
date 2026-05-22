@@ -170,7 +170,8 @@ const SignupPage = ({ setPage = () => {}, theme, toggleTheme }) => {
                     <option value="environment">Environment</option>
                     <option value="education">Education</option>
                     <option value="healthcare">Healthcare</option>
-                    <option value="humanitarian">Disaster Relief</option>
+                    <option value="disaster-relief">Disaster Relief</option>
+                    <option value="animal-rescue">Animal Rescue Operation</option>
                   </select>
                 </div>
               </div>
@@ -217,6 +218,8 @@ const SignupPage = ({ setPage = () => {}, theme, toggleTheme }) => {
                     <option value="education">Education & Literacy</option>
                     <option value="healthcare">Healthcare & Medicine</option>
                     <option value="relief">Disaster Relief</option>
+                    <option value="home-management">Home Management</option>
+                    <option value="animal-rescue">Animal Rescue Operation</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -268,9 +271,9 @@ const SignupPage = ({ setPage = () => {}, theme, toggleTheme }) => {
       {/* Right side - Visual block */}
       <div className="signup-side-banner">
         <div className="badge-pile">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&fit=crop&crop=faces&auto=format&q=80" alt="vol1" />
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&fit=crop&crop=faces&auto=format&q=80" alt="vol2" />
-          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&fit=crop&crop=faces&auto=format&q=80" alt="vol3" />
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&fit=crop&crop=faces&auto=format&q=80" alt="vol1" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&fit=crop&crop=faces&auto=format&q=80" alt="vol2" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&fit=crop&crop=faces&auto=format&q=80" alt="vol3" loading="lazy" />
           <div className="pile-text">+18k</div>
         </div>
         <blockquote>

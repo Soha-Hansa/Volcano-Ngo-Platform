@@ -7,6 +7,8 @@
   margin: 0 auto;
   padding: 100px 24px;
   box-sizing: border-box;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 450px;
 }
 
 .how-it-works-header {

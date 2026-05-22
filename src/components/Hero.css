@@ -616,3 +616,37 @@ html.dark .card-lines span {
   }
 }
 
+/* Hero Entrance Animations */
+.animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: heroFadeInUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: heroFadeIn 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Stagger delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.22s; }
+.stagger-3 { animation-delay: 0.34s; }
+.stagger-4 { animation-delay: 0.46s; }
+.stagger-5 { animation-delay: 0.58s; }
+.stagger-6 { animation-delay: 0.7s; }
+
+@keyframes heroFadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+

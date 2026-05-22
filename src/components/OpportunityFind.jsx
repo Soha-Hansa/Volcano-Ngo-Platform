@@ -120,7 +120,7 @@ const Opportunities = () => {
       {filteredJobs.length > 0 ? (
         <div className="jobs-grid">
           {filteredJobs.map((job, index) => (
-            <JobCard key={index} {...job} />
+            <JobCard key={index} index={index} {...job} />
           ))}
         </div>
       ) : (

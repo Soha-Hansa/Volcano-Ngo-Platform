@@ -37,10 +37,54 @@ const DashboardNgo = ({
   
   // State for Campaigns Table
   const [campaigns, setCampaigns] = useState([
-    { id: 1, name: "Reforest 2026", status: "Active", applicants: 42, spots: 50, deadline: "28 Feb" },
-    { id: 2, name: "Coastal Cleanup Drive", status: "Active", applicants: 18, spots: 25, deadline: "12 Mar" },
-    { id: 3, name: "Code for Kids Workshop", status: "Draft", applicants: 0, spots: 20, deadline: "—" },
-    { id: 4, name: "Winter Meal Program", status: "Closed", applicants: 64, spots: 60, deadline: "31 Jan" }
+    { 
+      id: 1, 
+      name: "Reforest 2026", 
+      status: "Active", 
+      applicants: 42, 
+      spots: 50, 
+      deadline: "28 Feb",
+      category: "Climate & Environment",
+      description: "Join us in planting over 500 native saplings to restore local forest canopy and fight urban heat islands.",
+      requirements: ["Physical Fitness", "Outdoor work", "Teamwork"],
+      image: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60"
+    },
+    { 
+      id: 2, 
+      name: "Coastal Cleanup Drive", 
+      status: "Active", 
+      applicants: 18, 
+      spots: 25, 
+      deadline: "12 Mar",
+      category: "Climate & Environment",
+      description: "Help clean and restore our coastline. We'll be collecting debris, segregating plastics, and recording waste data.",
+      requirements: ["Eco Awareness", "Coastal Safety", "Data Logging"],
+      image: "https://images.unsplash.com/photo-1618477388954-7852f32655ec?w=500&auto=format&fit=crop&q=60"
+    },
+    { 
+      id: 3, 
+      name: "Code for Kids Workshop", 
+      status: "Draft", 
+      applicants: 0, 
+      spots: 20, 
+      deadline: "25 Mar",
+      category: "Education & Literacy",
+      description: "Teach basic visual programming and HTML/CSS to kids in community centers. No advanced programming needed.",
+      requirements: ["Basic HTML/CSS", "Patience", "Mentoring"],
+      image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=500&auto=format&fit=crop&q=60"
+    },
+    { 
+      id: 4, 
+      name: "Winter Meal Program", 
+      status: "Closed", 
+      applicants: 64, 
+      spots: 60, 
+      deadline: "31 Jan",
+      category: "Community Development",
+      description: "Assist in preparing, packing, and distributing hot, nutritious meals to homeless families during cold winter weeks.",
+      requirements: ["Food Handling", "Empathy", "Cooking Skills"],
+      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=500&auto=format&fit=crop&q=60"
+    }
   ]);
 
   // Modal State for posting new opportunity
@@ -50,7 +94,10 @@ const DashboardNgo = ({
     status: "Active",
     applicants: 0,
     spots: "",
-    deadline: ""
+    deadline: "",
+    category: "Climate & Environment",
+    description: "",
+    requirements: ""
   });
 
   // Hover state for SVG chart tooltip
@@ -61,23 +108,60 @@ const DashboardNgo = ({
     return () => clearTimeout(timer);
   }, []);
 
+  const getCategoryImage = (category) => {
+    switch (category) {
+      case "Climate & Environment":
+        return "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=500&auto=format&fit=crop&q=60";
+      case "Education & Literacy":
+        return "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=500&auto=format&fit=crop&q=60";
+      case "Healthcare & Medical":
+        return "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=500&auto=format&fit=crop&q=60";
+      case "Disaster Relief":
+        return "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=500&auto=format&fit=crop&q=60";
+      case "Community Development":
+        return "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=500&auto=format&fit=crop&q=60";
+      case "Animal Welfare":
+        return "https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=500&auto=format&fit=crop&q=60";
+      default:
+        return "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=500&auto=format&fit=crop&q=60";
+    }
+  };
+
   // Handler to post a new campaign
   const handleCreateCampaign = (e) => {
     e.preventDefault();
-    if (!newCampaign.name || !newCampaign.spots || !newCampaign.deadline) {
+    if (!newCampaign.name || !newCampaign.spots || !newCampaign.deadline || !newCampaign.description) {
       alert("Please fill in all fields.");
       return;
     }
+    
+    const reqArray = newCampaign.requirements
+      ? newCampaign.requirements.split(",").map(r => r.trim()).filter(Boolean)
+      : [];
+
     const created = {
       id: campaigns.length + 1,
       name: newCampaign.name,
       status: newCampaign.status,
       applicants: 0,
       spots: parseInt(newCampaign.spots) || 0,
-      deadline: newCampaign.deadline
+      deadline: newCampaign.deadline,
+      category: newCampaign.category,
+      description: newCampaign.description,
+      requirements: reqArray,
+      image: getCategoryImage(newCampaign.category)
     };
     setCampaigns([created, ...campaigns]);
-    setNewCampaign({ name: "", status: "Active", applicants: 0, spots: "", deadline: "" });
+    setNewCampaign({
+      name: "",
+      status: "Active",
+      applicants: 0,
+      spots: "",
+      deadline: "",
+      category: "Climate & Environment",
+      description: "",
+      requirements: ""
+    });
     setIsModalOpen(false);
   };
 
@@ -204,7 +288,7 @@ const DashboardNgo = ({
             </header>
 
             {activeTab === "overview" ? (
-              <>
+              <div className="dashboard-view-transition">
                 {/* WELCOME BANNER & PRIMARY ACTION */}
                 <div className="welcome-banner-section">
                   <div className="welcome-text-area">
@@ -386,7 +470,7 @@ const DashboardNgo = ({
                         return (
                           <div key={volunteer.id} className="volunteer-match-card">
                             <div className="card-left-info">
-                              <img src={volunteer.avatar} alt={volunteer.name} className="v-avatar" />
+                              <img src={volunteer.avatar} alt={volunteer.name} className="v-avatar" loading="lazy" />
                               <div className="v-details">
                                 <span className="v-name">{volunteer.name}</span>
                                 <span className="v-role">{volunteer.role}</span>
@@ -468,7 +552,7 @@ const DashboardNgo = ({
                       {recentApplicants.map((applicant) => (
                         <div key={applicant.id} className="applicant-item-card">
                           <div className="applicant-left">
-                            <img src={applicant.avatar} alt={applicant.name} className="applicant-avatar" />
+                            <img src={applicant.avatar} alt={applicant.name} className="applicant-avatar" loading="lazy" />
                             <div className="applicant-meta">
                               <span className="applicant-name">{applicant.name}</span>
                               <span className="applicant-project">{applicant.campaign}</span>
@@ -482,9 +566,10 @@ const DashboardNgo = ({
                     </div>
                   </div>
                 </section>
-              </>
+              </div>
             ) : activeTab === "profile" ? (
-              <div className="profile-editor-container">
+              <div className="dashboard-view-transition">
+                <div className="profile-editor-container">
                 {/* Left Profile Card Preview */}
                 <div className="profile-editor-sidebar">
                   <div className="profile-preview-card">
@@ -713,9 +798,88 @@ const DashboardNgo = ({
                     <span>{saveStatus}</span>
                   </div>
                 )}
+                </div>
+              </div>
+            ) : activeTab === "campaigns" ? (
+              <div className="dashboard-view-transition">
+                {/* CAMPAIGNS HEADER ROW */}
+                <div className="campaigns-header-section">
+                  <div className="campaigns-text-area">
+                    <h1 className="campaigns-title">Volunteer Requirements & Campaigns</h1>
+                    <p className="campaigns-subtitle">
+                      Post volunteer opportunities and track applicant engagements.
+                    </p>
+                  </div>
+                  <button className="btn-post-opportunity" onClick={() => setIsModalOpen(true)}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Create Post</span>
+                  </button>
+                </div>
+
+                {/* Grid of Campaign Cards */}
+                <div className="campaigns-grid">
+                  {campaigns.map((c) => (
+                    <div key={c.id} className="campaign-card-premium">
+                      <div className="campaign-card-image-wrapper">
+                        <img 
+                          src={c.image || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=500&auto=format&fit=crop&q=60"} 
+                          alt={c.name} 
+                          className="campaign-card-img" 
+                          loading="lazy"
+                        />
+                        <span className={`status-badge-pill-card ${c.status.toLowerCase()}`}>
+                          {c.status}
+                        </span>
+                      </div>
+                      <div className="campaign-card-content">
+                        <div className="campaign-card-top">
+                          <span className="campaign-category-tag">{c.category || "General"}</span>
+                        </div>
+                        <h3 className="campaign-card-title">{c.name}</h3>
+                        <p className="campaign-card-description">{c.description || "Help support our operations and make a direct community impact."}</p>
+                        
+                        {c.requirements && c.requirements.length > 0 && (
+                          <div className="campaign-req-tags">
+                            {c.requirements.map((req, rIdx) => (
+                              <span key={rIdx} className="req-tag">{req}</span>
+                            ))}
+                          </div>
+                        )}
+
+                        <div className="campaign-progress-section">
+                          <div className="progress-info-row">
+                            <span className="progress-spots">Volunteers: {c.applicants} / {c.spots} spots</span>
+                            <span className="progress-percentage">{Math.round((c.applicants / c.spots) * 100)}%</span>
+                          </div>
+                          <div className="campaign-progress-bar-bg">
+                            <div 
+                              className="campaign-progress-bar-fill" 
+                              style={{ width: `${Math.min((c.applicants / c.spots) * 100, 100)}%` }}
+                            ></div>
+                          </div>
+                        </div>
+
+                        <div className="campaign-card-footer">
+                          <div className="campaign-deadline-info">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <circle cx="12" cy="12" r="10"></circle>
+                              <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>Deadline: {c.deadline}</span>
+                          </div>
+                          <button className="btn-manage-campaign">Manage</button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             ) : (
-              <div className="dashboard-placeholder-tab">
+              <div className="dashboard-view-transition">
+                <div className="dashboard-placeholder-tab">
                 <div className="placeholder-illustration">
                   <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.8 }}>
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -728,6 +892,7 @@ const DashboardNgo = ({
                 <h2>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Suite</h2>
                 <p>Detailed modules for managing {activeTab} will be implemented here. Use Overview to see active widgets.</p>
                 <button className="btn-opportunities-redirect" onClick={() => setActiveTab("overview")}>Back to Overview</button>
+                </div>
               </div>
             )}
           </div>
@@ -764,6 +929,37 @@ const DashboardNgo = ({
 
               <div className="form-row-grid">
                 <div className="form-group-field">
+                  <label htmlFor="campaign-category">Category</label>
+                  <select
+                    id="campaign-category"
+                    value={newCampaign.category}
+                    onChange={(e) => setNewCampaign({ ...newCampaign, category: e.target.value })}
+                    required
+                  >
+                    <option value="Climate & Environment">Climate & Environment</option>
+                    <option value="Education & Literacy">Education & Literacy</option>
+                    <option value="Healthcare & Medical">Healthcare & Medical</option>
+                    <option value="Disaster Relief">Disaster Relief</option>
+                    <option value="Community Development">Community Development</option>
+                    <option value="Animal Welfare">Animal Welfare</option>
+                  </select>
+                </div>
+
+                <div className="form-group-field">
+                  <label htmlFor="campaign-status">Initial Status</label>
+                  <select
+                    id="campaign-status"
+                    value={newCampaign.status}
+                    onChange={(e) => setNewCampaign({ ...newCampaign, status: e.target.value })}
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Draft">Draft</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-row-grid">
+                <div className="form-group-field">
                   <label htmlFor="campaign-spots">Target Spots</label>
                   <input
                     id="campaign-spots"
@@ -789,15 +985,36 @@ const DashboardNgo = ({
               </div>
 
               <div className="form-group-field">
-                <label htmlFor="campaign-status">Initial Status</label>
-                <select
-                  id="campaign-status"
-                  value={newCampaign.status}
-                  onChange={(e) => setNewCampaign({ ...newCampaign, status: e.target.value })}
-                >
-                  <option value="Active">Active</option>
-                  <option value="Draft">Draft</option>
-                </select>
+                <label htmlFor="campaign-description">Description & Volunteer Requirements</label>
+                <textarea
+                  id="campaign-description"
+                  placeholder="Describe what the volunteers will do, the impact of their work, etc."
+                  value={newCampaign.description}
+                  onChange={(e) => setNewCampaign({ ...newCampaign, description: e.target.value })}
+                  rows="3"
+                  style={{ 
+                    padding: "10px 14px", 
+                    border: "1px solid var(--border-color)", 
+                    borderRadius: "8px", 
+                    fontSize: "14px", 
+                    outline: "none", 
+                    background: "var(--bg-card)", 
+                    color: "var(--text-heading)", 
+                    fontFamily: "'Outfit', sans-serif" 
+                  }}
+                  required
+                ></textarea>
+              </div>
+
+              <div className="form-group-field">
+                <label htmlFor="campaign-requirements">Required Skills (comma-separated)</label>
+                <input
+                  id="campaign-requirements"
+                  type="text"
+                  placeholder="e.g. Outdoor work, Basic Coding, Patience"
+                  value={newCampaign.requirements}
+                  onChange={(e) => setNewCampaign({ ...newCampaign, requirements: e.target.value })}
+                />
               </div>
 
               <div className="modal-actions-footer">

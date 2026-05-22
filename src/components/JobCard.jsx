@@ -1,9 +1,9 @@
 import React from "react";
 import "./JobCard.css";
 
-const JobCard = ({ org, role, description, tags, time, location, type }) => {
+const JobCard = ({ org, role, description, tags, time, location, type, index = 0 }) => {
   return (
-    <div className="job-card">
+    <div className="job-card" style={{ animationDelay: `${index * 60}ms` }}>
       <h3 className="org-name">{org}</h3>
       <h2 className="role-title">{role}</h2>
       <p className="job-description">{description}</p>

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./VolunteerHours.css";
 
 const VolunteerHours = () => {
-  const data = [
+  const [data, setData] = useState([
     { month: "Aug", hours: 12 },
     { month: "Sep", hours: 18 },
     { month: "Oct", hours: 24 },
@@ -10,7 +10,21 @@ const VolunteerHours = () => {
     { month: "Dec", hours: 26 },
     { month: "Jan", hours: 38 },
     { month: "Feb", hours: 44 }
-  ];
+  ]);
+  const [growthTrend, setGrowthTrend] = useState(44);
+
+  useEffect(() => {
+    const randomized = data.map((item) => ({
+      ...item,
+      hours: Math.floor(Math.random() * 41) + 10 // random between 10 and 50
+    }));
+    setData(randomized);
+
+    const firstHours = randomized[0].hours;
+    const lastHours = randomized[randomized.length - 1].hours;
+    const trend = Math.round(((lastHours - firstHours) / firstHours) * 100);
+    setGrowthTrend(trend);
+  }, []);
 
   // SVG parameters
   const height = 150;
@@ -28,11 +42,19 @@ const VolunteerHours = () => {
         <div className="hours-header-text">
           <h3>Volunteer Activity</h3>
           <p className="trend-growth">
-            <span className="trend-badge">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <span className={`trend-badge ${growthTrend >= 0 ? "positive" : "negative"}`}>
+              <svg 
+                width="12" 
+                height="12" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="3"
+                style={{ transform: growthTrend >= 0 ? "none" : "rotate(180deg)", transition: "transform 0.3s ease" }}
+              >
                 <polyline points="18 15 12 9 6 15"/>
               </svg>
-              +44%
+              {growthTrend >= 0 ? `+${growthTrend}%` : `${growthTrend}%`}
             </span>
             <span>growth vs last 6 months</span>
           </p>

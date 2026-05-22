@@ -180,7 +180,7 @@ const NgoProfile = ({ setPage = () => {}, ngoData, theme, toggleTheme }) => {
                   return (
                     <div key={camp.id} className="public-campaign-card">
                       <div className="campaign-card-media">
-                        <img src={camp.image} alt={camp.title} className="campaign-img" />
+                        <img src={camp.image} alt={camp.title} className="campaign-img" loading="lazy" />
                         <span className="campaign-badge">{camp.category}</span>
                       </div>
                       <div className="campaign-card-body">

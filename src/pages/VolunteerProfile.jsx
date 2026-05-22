@@ -92,7 +92,7 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme }) => {
                         <div className="profile-left-col">
                             <div className="profile-main-card">
                                 <div className="profile-photo-container">
-                                    <img src={volunteer.avatar} alt={volunteer.name} className="volunteer-avatar-large" />
+                                    <img src={volunteer.avatar} alt={volunteer.name} className="volunteer-avatar-large" loading="lazy" />
                                     <span className="verify-badge-dot" title="Verified Volunteer">✓</span>
                                 </div>
 
