@@ -9,7 +9,8 @@ const DashboardNgo = ({
   ngoData: propsNgoData,
   setNgoData: propsSetNgoData,
   theme,
-  toggleTheme
+  toggleTheme,
+  logoutUser
 }) => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
@@ -175,7 +176,11 @@ const DashboardNgo = ({
   };
 
   const handleLogout = () => {
-    setPage("home");
+    if (logoutUser) {
+      logoutUser();
+    } else {
+      setPage("home");
+    }
   };
 
   // Mock datasets
@@ -282,7 +287,7 @@ const DashboardNgo = ({
                   </svg>
                   <span className="notification-badge-dot"></span>
                 </button>
-                <div className="team-avatar-icon">GE</div>
+                <div className="team-avatar-icon">{(ngoData.name || "GE").substring(0, 2).toUpperCase()}</div>
                 <button className="btn-logout" onClick={handleLogout}>Log out</button>
               </div>
             </header>
@@ -292,7 +297,7 @@ const DashboardNgo = ({
                 {/* WELCOME BANNER & PRIMARY ACTION */}
                 <div className="welcome-banner-section">
                   <div className="welcome-text-area">
-                    <h1 className="welcome-title">Welcome back, Green Earth.</h1>
+                    <h1 className="welcome-title">Welcome back, {ngoData.name || "Green Earth"}.</h1>
                     <p className="welcome-subtitle">
                       You have <span className="highlight-blue">12 new applications</span> waiting for review.
                     </p>

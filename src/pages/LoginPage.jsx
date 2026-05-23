@@ -1,17 +1,47 @@
 import React, { useState } from "react";
 import "./LoginPage.css";
 
-const LoginPage = ({ setPage = () => {}, theme, toggleTheme }) => {
+const LoginPage = ({ setPage = () => {}, theme, toggleTheme, loginUser }) => {
     const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Simulation: if email contains "ngo", route to NGO Dashboard, else Volunteer Dashboard
-        if (email.toLowerCase().includes("ngo")) {
-            setPage("dashboardNgo");
-        } else {
-            setPage("dashboard");
-        }
+        setErrorMsg("");
+        setIsSubmitting(true);
+
+        fetch("http://localhost:5000/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        })
+        .then(async (res) => {
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.message || "Failed to sign in");
+            }
+            return data;
+        })
+        .then((data) => {
+            if (loginUser) {
+                loginUser(data.token, data.user);
+            }
+            if (data.user.role === "ngo") {
+                setPage("dashboardNgo");
+            } else {
+                setPage("dashboard");
+            }
+        })
+        .catch((err) => {
+            setErrorMsg(err.message || "Something went wrong, please try again.");
+        })
+        .finally(() => {
+            setIsSubmitting(false);
+        });
     };
 
     return (
@@ -64,6 +94,8 @@ const LoginPage = ({ setPage = () => {}, theme, toggleTheme }) => {
                     Sign in to keep building the change you started.
                 </p>
 
+                {errorMsg && <div className="login-error-alert">{errorMsg}</div>}
+
                 <form onSubmit={handleSubmit}>
                     <div className="input-group">
                         <label htmlFor="email-input">Email</label>
@@ -74,6 +106,7 @@ const LoginPage = ({ setPage = () => {}, theme, toggleTheme }) => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            disabled={isSubmitting}
                         />
                     </div>
 
@@ -83,7 +116,10 @@ const LoginPage = ({ setPage = () => {}, theme, toggleTheme }) => {
                             id="password-input"
                             type="password"
                             placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
+                            disabled={isSubmitting}
                         />
                     </div>
 
@@ -96,11 +132,11 @@ const LoginPage = ({ setPage = () => {}, theme, toggleTheme }) => {
                         <a href="#" className="forgot-pwd-link">Forgot password?</a>
                     </div>
 
-                    <button type="submit" className="signin-btn">
-                        Sign in
+                    <button type="submit" className="signin-btn" disabled={isSubmitting}>
+                        {isSubmitting ? "Signing in..." : "Sign in"}
                     </button>
 
-                    <button type="button" className="google-btn" onClick={() => setPage("dashboard")}>
+                    <button type="button" className="google-btn" onClick={() => setPage("dashboard")} disabled={isSubmitting}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="google-icon-svg">
                             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>

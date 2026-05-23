@@ -7,6 +7,7 @@ import HowItWorks from '../components/HowItWorks';
 import Opportunities from '../components/Opportunities';
 import Testimonials from '../components/Testimonials';
 import Cta from '../components/Cta';
+import Faq from '../components/Faq';
 import Footer from '../components/Footer';
 import './Home.css';
 
@@ -39,6 +40,7 @@ export default function Home({ setPage, theme, toggleTheme }) {
         <Opportunities setPage={setPage} />
         <Testimonials />
         <Cta setPage={setPage} />
+        <Faq />
       </main>
       <Footer setPage={setPage} />
     </div>

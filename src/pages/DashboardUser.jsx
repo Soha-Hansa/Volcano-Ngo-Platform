@@ -9,18 +9,18 @@ import VolunteerHours from "../components/VolunteerHours";
 import UpcomingEvents from "../components/UpcomingEvents";
 import "./DashboardUser.css";
 
-const DashboardUser = ({ setPage = () => { }, theme, toggleTheme }) => {
+const DashboardUser = ({ setPage = () => { }, theme, toggleTheme, user, logoutUser }) => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("dashboard");
 
     // Profile state management
     const [profileData, setProfileData] = useState({
-        name: "Priya Sharma",
-        email: "priya.sharma@example.com",
-        phone: "+91 98765 43210",
-        bio: "Passionate volunteer dedicated to environmental conservation and educational empowerment. Always excited to meet like-minded change makers!",
-        skills: ["Reforestation", "Content Design", "Event Planning", "Teaching"],
-        interests: ["Environment", "Education", "Healthcare", "Disaster Relief"]
+        name: user?.name || "Priya Sharma",
+        email: user?.email || "priya.sharma@example.com",
+        phone: user?.phone || "+91 98765 43210",
+        bio: user?.bio || "Passionate volunteer dedicated to environmental conservation and educational empowerment. Always excited to meet like-minded change makers!",
+        skills: user?.skills ? (Array.isArray(user.skills) ? user.skills : user.skills.split(',').map(s => s.trim()).filter(Boolean)) : ["Reforestation", "Content Design", "Event Planning", "Teaching"],
+        interests: user?.interest ? [user.interest] : ["Environment", "Education", "Healthcare", "Disaster Relief"]
     });
     const [newSkill, setNewSkill] = useState("");
     const [saveStatus, setSaveStatus] = useState("");
@@ -106,6 +106,19 @@ const DashboardUser = ({ setPage = () => { }, theme, toggleTheme }) => {
         return () => clearTimeout(timer);
     }, []);
 
+    useEffect(() => {
+        if (user) {
+            setProfileData({
+                name: user.name || "Priya Sharma",
+                email: user.email || "priya.sharma@example.com",
+                phone: user.phone || "+91 98765 43210",
+                bio: user.bio || "Passionate volunteer dedicated to environmental conservation and educational empowerment. Always excited to meet like-minded change makers!",
+                skills: user.skills ? (Array.isArray(user.skills) ? user.skills : user.skills.split(',').map(s => s.trim()).filter(Boolean)) : ["Reforestation", "Content Design", "Event Planning", "Teaching"],
+                interests: user.interest ? [user.interest] : ["Environment", "Education", "Healthcare", "Disaster Relief"]
+            });
+        }
+    }, [user]);
+
     const handleSaveProfile = (e) => {
         e.preventDefault();
         setSaveStatus("Saving changes...");
@@ -190,7 +203,7 @@ const DashboardUser = ({ setPage = () => { }, theme, toggleTheme }) => {
                         {/* Top Header Section */}
                         <header className="dashboard-header">
                             <div className="header-greeting-area">
-                                <h2>Hello Priya 👋</h2>
+                                <h2>Hello {profileData.name || "Volunteer"} 👋</h2>
                                 <p className="header-date">Wednesday, 14 Feb 2026</p>
                             </div>
 
@@ -202,7 +215,7 @@ const DashboardUser = ({ setPage = () => { }, theme, toggleTheme }) => {
                                         <polyline points="12 5 19 12 12 19"></polyline>
                                     </svg>
                                 </button>
-                                <button className="btn-logout" onClick={() => setPage('home')}>
+                                <button className="btn-logout" onClick={logoutUser}>
                                     <span>Log out</span>
                                 </button>
                             </div>

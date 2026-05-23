@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./SignupPage.css";
 
-const SignupPage = ({ setPage = () => {}, theme, toggleTheme }) => {
+const SignupPage = ({ setPage = () => {}, theme, toggleTheme, loginUser }) => {
   const [role, setRole] = useState("volunteer"); // "volunteer" or "ngo"
   const [formData, setFormData] = useState({
     name: "",
@@ -13,15 +13,60 @@ const SignupPage = ({ setPage = () => {}, theme, toggleTheme }) => {
     ngoWebsite: "",
     password: ""
   });
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate successful registration and redirect to the appropriate dashboard
-    if (role === "ngo") {
-      setPage("dashboardNgo");
+    setErrorMsg("");
+    setIsSubmitting(true);
+
+    const payload = {
+      role,
+      name: formData.name,
+      email: formData.email,
+      password: formData.password
+    };
+
+    if (role === "volunteer") {
+      payload.skills = formData.skills;
+      payload.availability = formData.availability;
+      payload.interest = formData.interest;
     } else {
-      setPage("dashboard");
+      payload.ngoCategory = formData.ngoCategory;
+      payload.ngoWebsite = formData.ngoWebsite;
     }
+
+    fetch("http://localhost:5000/api/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to sign up");
+        }
+        return data;
+      })
+      .then((data) => {
+        if (loginUser) {
+          loginUser(data.token, data.user);
+        }
+        if (role === "ngo") {
+          setPage("dashboardNgo");
+        } else {
+          setPage("dashboard");
+        }
+      })
+      .catch((err) => {
+        setErrorMsg(err.message || "Something went wrong, please try again.");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
 
   return (
@@ -73,6 +118,8 @@ const SignupPage = ({ setPage = () => {}, theme, toggleTheme }) => {
         <p className="signup-subtitle">
           Join 18,500+ volunteers and 1,200+ NGOs already on Volcano.
         </p>
+
+        {errorMsg && <div className="signup-error-alert">{errorMsg}</div>}
 
         {/* Role Selector Toggle */}
         <div className="role-selector-toggle">

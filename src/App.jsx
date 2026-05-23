@@ -1,5 +1,6 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import Home from './pages/Home';
+import ChatWidget from './components/ChatWidget';
 import './App.css';
 
 // Lazy load secondary/interior pages to optimize initial bundle load time
@@ -30,6 +31,9 @@ function App() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(() => localStorage.getItem('token') || null);
+
   const [ngoData, setNgoData] = useState({
     name: "Green Earth Initiative",
     email: "contact@greenearth.org",
@@ -43,6 +47,33 @@ function App() {
       { name: "Sarah Jenkins", role: "Head of Operations" }
     ]
   });
+
+  // Verify token on mount/change
+  useEffect(() => {
+    if (!token) {
+      setUser(null);
+      return;
+    }
+
+    fetch('http://localhost:5000/api/auth/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Session invalid');
+        return res.json();
+      })
+      .then(data => {
+        setUser(data.user);
+      })
+      .catch(err => {
+        console.error("Token verification failed:", err);
+        localStorage.removeItem('token');
+        setToken(null);
+        setUser(null);
+      });
+  }, [token]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -58,6 +89,19 @@ function App() {
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  };
+
+  const loginUser = (userToken, userData) => {
+    localStorage.setItem('token', userToken);
+    setToken(userToken);
+    setUser(userData);
+  };
+
+  const logoutUser = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+    setUser(null);
+    setPage('home');
   };
 
   return (
@@ -76,28 +120,45 @@ function App() {
         )}
         {page === 'dashboard' && (
           <div className="page-transition">
-            <DashboardUser setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+            <DashboardUser 
+              setPage={setPage} 
+              theme={theme} 
+              toggleTheme={toggleTheme} 
+              user={user} 
+              logoutUser={logoutUser} 
+            />
           </div>
         )}
         {page === 'dashboardNgo' && (
           <div className="page-transition">
             <DashboardNgo 
               setPage={setPage} 
-              ngoData={ngoData} 
+              ngoData={user && user.role === 'ngo' ? user : ngoData} 
               setNgoData={setNgoData} 
               theme={theme}
               toggleTheme={toggleTheme}
+              logoutUser={logoutUser}
             />
           </div>
         )}
         {page === 'login' && (
           <div className="page-transition">
-            <LoginPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+            <LoginPage 
+              setPage={setPage} 
+              theme={theme} 
+              toggleTheme={toggleTheme} 
+              loginUser={loginUser} 
+            />
           </div>
         )}
         {page === 'signup' && (
           <div className="page-transition">
-            <SignupPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+            <SignupPage 
+              setPage={setPage} 
+              theme={theme} 
+              toggleTheme={toggleTheme} 
+              loginUser={loginUser} 
+            />
           </div>
         )}
         {page === 'volunteerProfile' && (
@@ -109,13 +170,16 @@ function App() {
           <div className="page-transition">
             <NgoProfile 
               setPage={setPage} 
-              ngoData={ngoData} 
+              ngoData={user && user.role === 'ngo' ? user : ngoData} 
               theme={theme}
               toggleTheme={toggleTheme}
             />
           </div>
         )}
       </Suspense>
+
+      {/* Global Interactive Chat Widget */}
+      <ChatWidget />
     </>
   );
 }
