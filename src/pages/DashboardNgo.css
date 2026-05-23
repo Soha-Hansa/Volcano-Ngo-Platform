@@ -518,6 +518,33 @@
   gap: 4px;
 }
 
+.btn-whatsapp-chat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #25d366;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  text-decoration: none;
+}
+
+.btn-whatsapp-chat:hover {
+  background-color: #20ba5a;
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+  color: #ffffff;
+}
+
+.btn-whatsapp-chat svg {
+  fill: currentColor;
+}
+
 /* CAMPAIGNS TABLE CARD */
 .widget-campaigns-table {
   flex-grow: 1;

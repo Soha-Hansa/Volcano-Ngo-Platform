@@ -216,6 +216,65 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
   }
 });
 
+// 4. Update NGO Profile Endpoint
+app.put('/api/ngo/profile', authenticateToken, (req, res) => {
+  try {
+    if (req.user.role !== 'ngo') {
+      return res.status(403).json({ message: "Only NGO accounts can update NGO profiles" });
+    }
+
+    const {
+      name,
+      ngoCategory,
+      ngoWebsite,
+      address,
+      phone,
+      mission,
+      team,
+      ngoCertificate,
+      certificateName,
+      certificateVerified
+    } = req.body;
+
+    const users = readUsers();
+    const userIndex = users.findIndex(u => u.id === req.user.id);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ message: "NGO user not found" });
+    }
+
+    // Update fields
+    const updatedUser = {
+      ...users[userIndex],
+      name: name !== undefined ? name.trim() : users[userIndex].name,
+      ngoCategory: ngoCategory !== undefined ? ngoCategory : users[userIndex].ngoCategory,
+      ngoWebsite: ngoWebsite !== undefined ? ngoWebsite.trim() : users[userIndex].ngoWebsite,
+      address: address !== undefined ? address.trim() : users[userIndex].address,
+      phone: phone !== undefined ? phone.trim() : users[userIndex].phone,
+      mission: mission !== undefined ? mission.trim() : users[userIndex].mission,
+      team: team !== undefined ? team : users[userIndex].team,
+      ngoCertificate: ngoCertificate !== undefined ? ngoCertificate : users[userIndex].ngoCertificate,
+      certificateName: certificateName !== undefined ? certificateName : users[userIndex].certificateName,
+      certificateVerified: certificateVerified !== undefined ? certificateVerified : users[userIndex].certificateVerified
+    };
+
+    users[userIndex] = updatedUser;
+    writeUsers(users);
+
+    // Exclude password hash
+    const { passwordHash: _, ...userResponse } = updatedUser;
+
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user: userResponse
+    });
+
+  } catch (error) {
+    console.error("Update NGO profile error:", error);
+    return res.status(500).json({ message: "Internal server error during profile update" });
+  }
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`==================================================`);

@@ -1,9 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './VolunteerProfile.css';
 
-const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme }) => {
+const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme, onStartChat }) => {
+    const [verificationStatus, setVerificationStatus] = useState('unverified'); // 'unverified' | 'scanning' | 'verified'
+    const [progress, setProgress] = useState(0);
+    const [aadhaarFile, setAadhaarFile] = useState(null);
+    const [linkedinUrl, setLinkedinUrl] = useState('');
+
+    const handleStartVerification = () => {
+        if (!aadhaarFile) return;
+        setVerificationStatus('scanning');
+        setProgress(0);
+    };
+
+    useEffect(() => {
+        let interval = null;
+        if (verificationStatus === 'scanning') {
+            interval = setInterval(() => {
+                setProgress((prev) => {
+                    if (prev >= 100) {
+                        clearInterval(interval);
+                        setVerificationStatus('verified');
+                        return 100;
+                    }
+                    return prev + 10;
+                });
+            }, 300);
+        }
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [verificationStatus]);
+
     // Volunteer high-fidelity default details
     const volunteer = {
         name: "Priya Sharma",
@@ -93,11 +123,17 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme }) => {
                             <div className="profile-main-card">
                                 <div className="profile-photo-container">
                                     <img src={volunteer.avatar} alt={volunteer.name} className="volunteer-avatar-large" loading="lazy" />
-                                    <span className="verify-badge-dot" title="Verified Volunteer">✓</span>
+                                    {verificationStatus === 'verified' ? (
+                                        <span className="verify-badge-dot verified" title="Verified Volunteer">✓</span>
+                                    ) : (
+                                        <span className="verify-badge-dot unverified" title="Verification Pending">⚠️</span>
+                                    )}
                                 </div>
 
                                 <h2 className="volunteer-name-large">{volunteer.name}</h2>
-                                <p className="volunteer-tagline">{volunteer.title}</p>
+                                <p className="volunteer-tagline">
+                                    {verificationStatus === 'verified' ? 'Verified Community Champion' : 'Volunteer (Verification Pending)'}
+                                </p>
                                 
                                 <div className="volunteer-location-row">
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -107,11 +143,32 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme }) => {
                                     <span>{volunteer.location}</span>
                                 </div>
                                 
+                                {verificationStatus === 'verified' && linkedinUrl && (
+                                    <div className="volunteer-linkedin-container">
+                                        <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="volunteer-linkedin-link">
+                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                                            </svg>
+                                            <span>Visit LinkedIn Profile</span>
+                                        </a>
+                                    </div>
+                                )}
+                                
                                 <span className="member-since-badge">{volunteer.since}</span>
 
                                 <div className="profile-divider"></div>
 
                                 <div className="contact-actions-stack">
+                                    <button 
+                                        className="btn-contact-volunteer chat"
+                                        onClick={() => onStartChat && onStartChat({ name: volunteer.name, role: 'volunteer', avatar: volunteer.avatar })}
+                                        id="chat-volunteer-btn"
+                                    >
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                        </svg>
+                                        <span>Chat with Volunteer</span>
+                                    </button>
                                     <a href={`mailto:${volunteer.name.toLowerCase().replace(' ', '.')}@example.com`} className="btn-contact-volunteer email">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
@@ -128,6 +185,130 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme }) => {
                                         <span>Share Profile</span>
                                     </button>
                                 </div>
+                            </div>
+
+                            {/* Verification Form Card */}
+                            <div className="profile-verification-card">
+                                <h3 className="verification-card-title">Identity Verification</h3>
+                                
+                                {verificationStatus === 'unverified' && (
+                                    <div className="verification-form">
+                                        <p className="verification-card-desc">
+                                            Upload your Aadhaar Card to verify your volunteer profile. LinkedIn is optional.
+                                        </p>
+                                        
+                                        <div className="verification-input-group">
+                                            <label className="verification-label">
+                                                Aadhaar Card <span className="required-star">*</span>
+                                            </label>
+                                            <div className="verify-drop-zone">
+                                                <input 
+                                                    type="file" 
+                                                    accept=".jpg,.jpeg,.png,.pdf" 
+                                                    onChange={(e) => {
+                                                        if (e.target.files && e.target.files[0]) {
+                                                            setAadhaarFile(e.target.files[0]);
+                                                        }
+                                                    }}
+                                                    className="verify-file-input"
+                                                    id="aadhaar-upload-input"
+                                                />
+                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="upload-icon">
+                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                                </svg>
+                                                <span className="drop-zone-text">
+                                                    {aadhaarFile ? aadhaarFile.name : 'Upload Aadhaar (PDF / Image)'}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div className="verification-input-group">
+                                            <label className="verification-label">LinkedIn URL (Optional)</label>
+                                            <input 
+                                                type="url" 
+                                                value={linkedinUrl}
+                                                onChange={(e) => setLinkedinUrl(e.target.value)}
+                                                placeholder="https://linkedin.com/in/username"
+                                                className="verify-url-input"
+                                                id="linkedin-url-input"
+                                            />
+                                        </div>
+
+                                        <button 
+                                            className="btn-verify-submit"
+                                            disabled={!aadhaarFile}
+                                            onClick={handleStartVerification}
+                                            id="btn-trigger-verification"
+                                        >
+                                            Verify Profile
+                                        </button>
+                                    </div>
+                                )}
+
+                                {verificationStatus === 'scanning' && (
+                                    <div className="verification-scanning-view">
+                                        <div className="scan-doc-container">
+                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="scan-doc-icon">
+                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                <polyline points="14 2 14 8 20 8"></polyline>
+                                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                                <polyline points="10 9 9 9 8 9"></polyline>
+                                            </svg>
+                                            <div className="scan-laser-line"></div>
+                                        </div>
+                                        
+                                        <h4 className="scan-status-title">Scanning Aadhaar...</h4>
+                                        <div className="scan-progress-wrapper">
+                                            <div className="scan-progress-bar-bg">
+                                                <div className="scan-progress-bar" style={{ width: `${progress}%` }}></div>
+                                            </div>
+                                            <span className="scan-percentage">{progress}%</span>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {verificationStatus === 'verified' && (
+                                    <div className="verification-success-view">
+                                        <div className="success-badge-wrapper">
+                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="success-check-icon">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                        </div>
+                                        <h4 className="verified-status-title">User Verified ✅</h4>
+                                        <p className="verified-status-desc">
+                                            Identity verification successfully completed.
+                                        </p>
+                                        
+                                        <div className="verified-details-list">
+                                            <div className="verified-detail-item">
+                                                <span>Aadhaar:</span>
+                                                <strong>{aadhaarFile?.name || 'Verified Card'}</strong>
+                                            </div>
+                                            {linkedinUrl && (
+                                                <div className="verified-detail-item">
+                                                    <span>LinkedIn:</span>
+                                                    <strong>Connected</strong>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <button 
+                                            className="btn-verify-reset"
+                                            onClick={() => {
+                                                setVerificationStatus('unverified');
+                                                setAadhaarFile(null);
+                                                setLinkedinUrl('');
+                                                setProgress(0);
+                                            }}
+                                            id="btn-reset-verification"
+                                        >
+                                            Reset Verification
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
 

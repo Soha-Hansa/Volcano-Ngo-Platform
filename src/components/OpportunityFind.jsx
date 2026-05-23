@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./OpportunityFind.css";
 import JobCard from "./JobCard";
 
-const Opportunities = () => {
+const Opportunities = ({ onStartChat }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("All types");
 
@@ -120,7 +120,7 @@ const Opportunities = () => {
       {filteredJobs.length > 0 ? (
         <div className="jobs-grid">
           {filteredJobs.map((job, index) => (
-            <JobCard key={index} index={index} {...job} />
+            <JobCard key={index} index={index} {...job} onStartChat={onStartChat} />
           ))}
         </div>
       ) : (

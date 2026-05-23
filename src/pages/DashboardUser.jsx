@@ -197,7 +197,16 @@ const DashboardUser = ({ setPage = () => { }, theme, toggleTheme, user, logoutUs
             <Header setPage={setPage} currentPage="dashboard" theme={theme} toggleTheme={toggleTheme} />
             <main className="main-content" style={{ display: 'block', width: '100%', backgroundColor: 'var(--bg-primary)' }}>
                 <div className="dashboard">
-                    <Sidebar setPage={setPage} currentPage={activeTab} onTabChange={setActiveTab} />
+                    <Sidebar 
+                        setPage={setPage} 
+                        currentPage={activeTab} 
+                        onTabChange={setActiveTab} 
+                        userProfile={{
+                            name: profileData.name,
+                            role: "Volunteer",
+                            avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&fit=crop&crop=faces&auto=format&q=80"
+                        }}
+                    />
 
                     <div className="dashboard-main">
                         {/* Top Header Section */}

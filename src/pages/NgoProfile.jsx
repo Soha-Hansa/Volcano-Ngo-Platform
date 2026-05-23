@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./NgoProfile.css";
 
 const NgoProfile = ({ setPage = () => {}, ngoData, theme, toggleTheme }) => {
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
   // Safe fallback if ngoData is not passed
   const data = ngoData || {
     name: "Green Earth Initiative",
@@ -171,6 +172,49 @@ const NgoProfile = ({ setPage = () => {}, ngoData, theme, toggleTheme }) => {
               </div>
             </section>
 
+            {/* Authenticity Certificate Block */}
+            <section className="profile-details-card license-section-public">
+              <h2 className="section-card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" strokeWidth="2.5">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="M9 11l2 2 4-4"/>
+                </svg>
+                Licensing & Authenticity
+              </h2>
+              
+              {data.certificateVerified ? (
+                <div 
+                  className="public-cert-badge-card" 
+                  onClick={() => setShowPreviewModal(true)}
+                  title="Click to view verified registration document"
+                >
+                  <div className="badge-icon-holder-gold">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <circle cx="12" cy="8" r="7"/>
+                      <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+                    </svg>
+                  </div>
+                  <div className="cert-details">
+                    <span className="cert-main-text">Official Registration License Verified</span>
+                    <p className="cert-sub-text">Volcano verified registration certificate has been verified. Click to view credentials document.</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="public-cert-badge-card pending">
+                  <div className="badge-icon-holder-gold">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                  </div>
+                  <div className="cert-details">
+                    <span className="cert-main-text">License Document Pending</span>
+                    <p className="cert-sub-text">This organization hasn't uploaded registration documents for verification yet.</p>
+                  </div>
+                </div>
+              )}
+            </section>
+
             {/* Active Campaigns List */}
             <section className="profile-details-card campaigns-section">
               <h2 className="section-card-title">Active Campaigns</h2>
@@ -257,6 +301,32 @@ const NgoProfile = ({ setPage = () => {}, ngoData, theme, toggleTheme }) => {
 
         </div>
       </main>
+
+      {showPreviewModal && data.ngoCertificate && (
+        <div className="cert-modal-overlay" onClick={() => setShowPreviewModal(false)}>
+          <div className="cert-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="cert-modal-header">
+              <h3>Authenticity License Certificate</h3>
+              <button type="button" className="btn-cert-modal-close" onClick={() => setShowPreviewModal(false)}>&times;</button>
+            </div>
+            <div className="cert-modal-body">
+              {data.ngoCertificate.startsWith('data:application/pdf') ? (
+                <iframe 
+                  src={data.ngoCertificate} 
+                  className="cert-pdf-iframe" 
+                  title="NGO Certificate PDF"
+                />
+              ) : (
+                <img 
+                  src={data.ngoCertificate} 
+                  alt="NGO License Certificate" 
+                  className="cert-image-preview" 
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer setPage={setPage} />
     </div>

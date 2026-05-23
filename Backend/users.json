@@ -1,0 +1,14 @@
+[
+  {
+    "id": "usr_1779525339123_55c002u6l",
+    "role": "volunteer",
+    "name": "Puja",
+    "email": "puja@gmail.com",
+    "passwordHash": "$2a$10$69q7NvEd9h8qeSHylRWauOg3HHIgquRDlacKX9aT.stdefbR5qW.O",
+    "createdAt": "2026-05-23T08:35:39.123Z",
+    "skills": "Relief camp",
+    "availability": "flexible",
+    "interest": "disaster-relief",
+    "hoursContributed": 0
+  }
+]

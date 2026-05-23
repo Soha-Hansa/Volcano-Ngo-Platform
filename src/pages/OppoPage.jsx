@@ -3,12 +3,12 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Opportunities from '../components/OpportunityFind'
 
-const OppoPage = ({ setPage, theme, toggleTheme }) => {
+const OppoPage = ({ setPage, theme, toggleTheme, onStartChat }) => {
   return (
     <div className="app-container">
       <Header setPage={setPage} currentPage="opportunities" theme={theme} toggleTheme={toggleTheme} />
       <main className="main-content" style={{ display: 'block', width: '100%' }}>
-        <Opportunities />
+        <Opportunities onStartChat={onStartChat} />
       </main>
       <Footer setPage={setPage} />
     </div>

@@ -17,6 +17,59 @@ const DashboardNgo = ({
   const [invitedVolunteers, setInvitedVolunteers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [verificationStatus, setVerificationStatus] = useState(
+    propsNgoData?.certificateVerified ? 'verified' : 'idle'
+  );
+  const [scanProgress, setScanProgress] = useState(0);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
+
+  useEffect(() => {
+    if (propsNgoData?.certificateVerified) {
+      setVerificationStatus('verified');
+    } else {
+      setVerificationStatus('idle');
+    }
+  }, [propsNgoData]);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setVerificationStatus('scanning');
+    setScanProgress(0);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64Data = event.target.result;
+      
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        setScanProgress(progress);
+        if (progress >= 100) {
+          clearInterval(interval);
+          setVerificationStatus('verified');
+          if (propsSetNgoData) {
+            propsSetNgoData({
+              ...ngoData,
+              ngoCertificate: base64Data,
+              certificateName: file.name,
+              certificateVerified: true
+            });
+          } else {
+            setLocalNgoData({
+              ...localNgoData,
+              ngoCertificate: base64Data,
+              certificateName: file.name,
+              certificateVerified: true
+            });
+          }
+        }
+      }, 300);
+    };
+    reader.readAsDataURL(file);
+  };
+
   // NGO details state with props fallback
   const [localNgoData, setLocalNgoData] = useState({
     name: "Green Earth Initiative",
@@ -186,8 +239,11 @@ const DashboardNgo = ({
   // Mock datasets
   const smartMatches = [
     { id: 1, name: "Aarav Mehta", role: "Frontend Developer", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&fit=crop&crop=faces&auto=format&q=80" },
-    { id: 2, name: "Sophie Tan", role: "Brand Designer", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&fit=crop&crop=faces&auto=format&q=80" },
-    { id: 3, name: "Rahul Verma", role: "Fullstack Engineer", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&fit=crop&crop=faces&auto=format&q=80" }
+    { id: 2, name: "Priyanka Banerjee", role: "Brand Designer", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&fit=crop&crop=faces&auto=format&q=80" },
+    { id: 3, name: "Rahul Verma", role: "Fullstack Engineer", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&fit=crop&crop=faces&auto=format&q=80" },
+    { id: 4, name: "Mouma Das", role: "UI/UX Consultant", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&fit=crop&crop=faces&auto=format&q=80" },
+    { id: 5, name: "Debasmita Sen", role: "Social Media Lead", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&fit=crop&crop=faces&auto=format&q=80" },
+    { id: 6, name: "Subrata Bose", role: "Data Analyst", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&fit=crop&crop=faces&auto=format&q=80" }
   ];
 
   const recentApplicants = [
@@ -481,19 +537,34 @@ const DashboardNgo = ({
                                 <span className="v-role">{volunteer.role}</span>
                               </div>
                             </div>
-                            <button
-                              className={`btn-invite-action ${isInvited ? "invited" : ""}`}
-                              onClick={() => handleInvite(volunteer.id)}
-                            >
-                              {isInvited ? (
-                                <>
-                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                                  <span>Invited</span>
-                                </>
-                              ) : (
-                                "Invite"
-                              )}
-                            </button>
+                            <div className="card-right-actions" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                              <button
+                                className={`btn-invite-action ${isInvited ? "invited" : ""}`}
+                                onClick={() => handleInvite(volunteer.id)}
+                              >
+                                {isInvited ? (
+                                  <>
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                    <span>Invited</span>
+                                  </>
+                                ) : (
+                                  "Invite"
+                                )}
+                              </button>
+                              
+                              <a
+                                href={`https://wa.me/919876543210?text=Hi%20${encodeURIComponent(volunteer.name)},%20we%20saw%20your%20profile%20on%20Volcano%20and%20would%20love%20to%20chat%20about%20our%20open%20roles!`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-whatsapp-chat"
+                                title={`Chat with ${volunteer.name} on WhatsApp`}
+                              >
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.59 1.978 14.12 .952 11.487.95c-5.442 0-9.866 4.372-9.87 9.802 0 1.814.504 3.59 1.46 5.184L2.082 22l6.23-1.611c-1.603.953-3.19 1.453-4.832 1.454zM16.732 13.7c-.287-.143-1.695-.838-1.955-.933-.26-.096-.45-.143-.639.143-.19.286-.735.933-.9 1.122-.165.189-.33.214-.617.071-2.876-1.433-4.717-3.23-5.51-4.597-.189-.327-.02-.503.143-.666.147-.147.33-.382.495-.572.165-.19.22-.327.33-.546.11-.22.054-.412-.027-.555-.08-.143-.639-1.543-.876-2.112-.23-.556-.465-.48-.639-.49l-.546-.01c-.19 0-.5.07-.76.356-.26.287-1 .978-1 2.387s1.02 2.775 1.16 2.966c.14.191 2.007 3.064 4.862 4.297.68.293 1.21.469 1.62.6.68.216 1.3.185 1.79.112.55-.082 1.695-.693 1.935-1.362.24-.669.24-1.242.17-1.362-.07-.12-.26-.192-.547-.335z"/>
+                                </svg>
+                                <span>WhatsApp</span>
+                              </a>
+                            </div>
                           </div>
                         );
                       })}
@@ -633,10 +704,49 @@ const DashboardNgo = ({
                   <form onSubmit={(e) => {
                     e.preventDefault();
                     setSaveStatus("Saving changes...");
-                    setTimeout(() => {
+                    
+                    const token = localStorage.getItem('token');
+                    
+                    fetch('http://localhost:5000/api/ngo/profile', {
+                      method: 'PUT',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                      },
+                      body: JSON.stringify({
+                        name: ngoData.name,
+                        ngoCategory: ngoData.category,
+                        ngoWebsite: ngoData.website,
+                        address: ngoData.address,
+                        phone: ngoData.phone,
+                        mission: ngoData.mission,
+                        team: ngoData.team,
+                        ngoCertificate: ngoData.ngoCertificate,
+                        certificateName: ngoData.certificateName,
+                        certificateVerified: ngoData.certificateVerified
+                      })
+                    })
+                    .then(async res => {
+                      const data = await res.json();
+                      if (!res.ok) {
+                        throw new Error(data.message || 'Failed to save profile');
+                      }
+                      return data;
+                    })
+                    .then(data => {
                       setSaveStatus("Profile saved successfully!");
+                      if (propsSetNgoData) {
+                        propsSetNgoData(data.user);
+                      } else {
+                        setLocalNgoData(data.user);
+                      }
                       setTimeout(() => setSaveStatus(""), 3000);
-                    }, 800);
+                    })
+                    .catch(err => {
+                      setSaveStatus("Error saving changes.");
+                      alert(err.message);
+                      setTimeout(() => setSaveStatus(""), 3000);
+                    });
                   }} className="profile-edit-form">
                     <div className="form-grid">
                       <div className="form-group-field full-width">
@@ -782,6 +892,99 @@ const DashboardNgo = ({
                           Add Member
                         </button>
                       </div>
+                    </div>
+
+                    <div className="licensing-authenticity-section">
+                      <h3>Licensing & Authenticity</h3>
+                      <p className="licensing-section-desc">
+                        Upload your NGO license certificate or registration documents so volunteers can trust your organization.
+                      </p>
+                      
+                      {verificationStatus === 'idle' && (
+                        <div className="license-upload-zone">
+                          <input 
+                            type="file" 
+                            id="license-file-input" 
+                            accept="image/*,application/pdf" 
+                            onChange={handleFileChange} 
+                            style={{ display: 'none' }}
+                          />
+                          <label htmlFor="license-file-input" className="license-upload-label">
+                            <svg className="upload-icon-svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                              <polyline points="17 8 12 3 7 8"></polyline>
+                              <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <span className="upload-label-title">Click to upload certificate</span>
+                            <span className="upload-label-subtitle">Supports PDF, JPG, PNG up to 5MB</span>
+                          </label>
+                        </div>
+                      )}
+
+                      {verificationStatus === 'scanning' && (
+                        <div className="license-scanning-container">
+                          <div className="license-scanning-card">
+                            <div className="scanning-laser-line"></div>
+                            <div className="scanning-file-info">
+                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                              </svg>
+                              <div className="file-details">
+                                <span className="file-name">{ngoData.certificateName || "License_Document.pdf"}</span>
+                                <span className="scanning-status-text">Verifying and scanning authenticity... {scanProgress}%</span>
+                              </div>
+                            </div>
+                            <div className="scanning-progress-track">
+                              <div className="scanning-progress-fill" style={{ width: `${scanProgress}%` }}></div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {verificationStatus === 'verified' && (
+                        <div className="license-verified-container">
+                          <div className="license-verified-badge" onClick={() => setShowPreviewModal(true)}>
+                            <div className="badge-left">
+                              <div className="verified-check-circle">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                              </div>
+                              <div className="badge-info">
+                                <span className="verified-title">License Certificate Verified</span>
+                                <span className="verified-subtitle">{ngoData.certificateName || "Uploaded document"}</span>
+                              </div>
+                            </div>
+                            <button type="button" className="btn-view-certificate">View Certificate</button>
+                          </div>
+                          
+                          <button 
+                            type="button" 
+                            className="btn-reupload-license"
+                            onClick={() => {
+                              setVerificationStatus('idle');
+                              if (propsSetNgoData) {
+                                propsSetNgoData({
+                                  ...ngoData,
+                                  ngoCertificate: null,
+                                  certificateName: "",
+                                  certificateVerified: false
+                                });
+                              } else {
+                                setLocalNgoData({
+                                  ...localNgoData,
+                                  ngoCertificate: null,
+                                  certificateName: "",
+                                  certificateVerified: false
+                                });
+                              }
+                            }}
+                          >
+                            Upload another document
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     <div className="form-actions-row">
@@ -1027,6 +1230,38 @@ const DashboardNgo = ({
                 <button type="submit" className="btn-submit-campaign">Post Opportunity</button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showPreviewModal && (
+        <div className="cert-modal-overlay" onClick={() => setShowPreviewModal(false)}>
+          <div className="cert-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="cert-modal-header">
+              <h3>Authenticity License Certificate</h3>
+              <button type="button" className="btn-cert-modal-close" onClick={() => setShowPreviewModal(false)}>&times;</button>
+            </div>
+            <div className="cert-modal-body">
+              {ngoData.ngoCertificate ? (
+                ngoData.ngoCertificate.startsWith('data:application/pdf') ? (
+                  <iframe 
+                    src={ngoData.ngoCertificate} 
+                    className="cert-pdf-iframe" 
+                    title="NGO Certificate PDF"
+                  />
+                ) : (
+                  <img 
+                    src={ngoData.ngoCertificate} 
+                    alt="NGO License Certificate" 
+                    className="cert-image-preview" 
+                  />
+                )
+              ) : (
+                <div className="cert-empty-preview">
+                  <p>No preview available for this document.</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

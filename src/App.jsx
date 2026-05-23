@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import Home from './pages/Home';
 import ChatWidget from './components/ChatWidget';
+import DirectMessageWidget from './components/DirectMessageWidget';
 import './App.css';
 
 // Lazy load secondary/interior pages to optimize initial bundle load time
@@ -33,6 +34,7 @@ function App() {
 
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(() => localStorage.getItem('token') || null);
+  const [activeDm, setActiveDm] = useState(null);
 
   const [ngoData, setNgoData] = useState({
     name: "Green Earth Initiative",
@@ -115,7 +117,12 @@ function App() {
       <Suspense fallback={<PageLoader />}>
         {page === 'opportunities' && (
           <div className="page-transition">
-            <OppoPage setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+            <OppoPage 
+              setPage={setPage} 
+              theme={theme} 
+              toggleTheme={toggleTheme} 
+              onStartChat={(target) => setActiveDm(target)}
+            />
           </div>
         )}
         {page === 'dashboard' && (
@@ -163,7 +170,12 @@ function App() {
         )}
         {page === 'volunteerProfile' && (
           <div className="page-transition">
-            <VolunteerProfile setPage={setPage} theme={theme} toggleTheme={toggleTheme} />
+            <VolunteerProfile 
+              setPage={setPage} 
+              theme={theme} 
+              toggleTheme={toggleTheme} 
+              onStartChat={(target) => setActiveDm(target)}
+            />
           </div>
         )}
         {page === 'ngoProfile' && (
@@ -180,6 +192,9 @@ function App() {
 
       {/* Global Interactive Chat Widget */}
       <ChatWidget />
+
+      {/* Direct Message Chat Widget */}
+      <DirectMessageWidget activeDm={activeDm} onClose={() => setActiveDm(null)} />
     </>
   );
 }
