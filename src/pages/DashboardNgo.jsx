@@ -16,6 +16,86 @@ const DashboardNgo = ({
   const [activeTab, setActiveTab] = useState("overview");
   const [invitedVolunteers, setInvitedVolunteers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeVolunteerFilter, setActiveVolunteerFilter] = useState("All");
+  const [volunteersList, setVolunteersList] = useState([
+    {
+      id: 1,
+      name: "Priya Sharma",
+      skills: ["Reforestation", "Content Design", "Event Planning"],
+      campaign: "Reforest 2026",
+      hours: 184,
+      status: "In Progress",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&fit=crop&crop=faces&auto=format&q=80",
+      email: "priya.sharma@example.com",
+      phone: "+91 98765 43210"
+    },
+    {
+      id: 2,
+      name: "Aarav Mehta",
+      skills: ["Frontend Developer", "UI/UX Design"],
+      campaign: "Code for Kids Workshop",
+      hours: 44,
+      status: "In Progress",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&fit=crop&crop=faces&auto=format&q=80",
+      email: "aarav.mehta@example.com",
+      phone: "+91 98765 43211"
+    },
+    {
+      id: 3,
+      name: "Sophie Tan",
+      skills: ["Teaching", "Patience", "Mentoring"],
+      campaign: "Code for Kids Workshop",
+      hours: 0,
+      status: "Not Started",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&fit=crop&crop=faces&auto=format&q=80",
+      email: "sophie.tan@example.com",
+      phone: "+91 98765 43212"
+    },
+    {
+      id: 4,
+      name: "Rahul Verma",
+      skills: ["Outdoor Work", "Data Logging"],
+      campaign: "Coastal Cleanup Drive",
+      hours: 12,
+      status: "Completed",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&fit=crop&crop=faces&auto=format&q=80",
+      email: "rahul.verma@example.com",
+      phone: "+91 98765 43213"
+    },
+    {
+      id: 5,
+      name: "Maya Iyer",
+      skills: ["Food Preparation", "Empathy"],
+      campaign: "Winter Meal Program",
+      hours: 32,
+      status: "Completed",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&fit=crop&crop=faces&auto=format&q=80",
+      email: "maya.iyer@example.com",
+      phone: "+91 98765 43214"
+    },
+    {
+      id: 6,
+      name: "Debasmita Sen",
+      skills: ["Social Media", "Content Writing"],
+      campaign: "Coastal Cleanup Drive",
+      hours: 0,
+      status: "Not Started",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&fit=crop&crop=faces&auto=format&q=80",
+      email: "debasmita.sen@example.com",
+      phone: "+91 98765 43215"
+    },
+    {
+      id: 7,
+      name: "Subrata Bose",
+      skills: ["Data Analyst", "Report Design"],
+      campaign: "Winter Meal Program",
+      hours: 24,
+      status: "Completed",
+      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&fit=crop&crop=faces&auto=format&q=80",
+      email: "subrata.bose@example.com",
+      phone: "+91 98765 43216"
+    }
+  ]);
 
   const [verificationStatus, setVerificationStatus] = useState(
     propsNgoData?.certificateVerified ? 'verified' : 'idle'
@@ -1083,6 +1163,103 @@ const DashboardNgo = ({
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            ) : activeTab === "volunteers" ? (
+              <div className="dashboard-view-transition">
+                {/* VOLUNTEERS HEADER ROW */}
+                <div className="volunteers-header-section">
+                  <div className="volunteers-text-area">
+                    <h1 className="volunteers-title">Volunteers Directory</h1>
+                    <p className="volunteers-subtitle">
+                      Manage and track volunteers committed to your organization's campaigns.
+                    </p>
+                  </div>
+                  <div className="volunteers-filter-tabs">
+                    {["All", "In Progress", "Completed", "Not Started"].map((filter) => {
+                      const count = filter === "All" 
+                        ? volunteersList.length 
+                        : volunteersList.filter(v => v.status === filter).length;
+                      return (
+                        <button
+                          key={filter}
+                          className={`btn-filter-tab ${activeVolunteerFilter === filter ? "active" : ""}`}
+                          onClick={() => setActiveVolunteerFilter(filter)}
+                        >
+                          {filter} <span className="filter-count">({count})</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* VOLUNTEERS GRID */}
+                <div className="volunteers-grid-premium">
+                  {volunteersList
+                    .filter((v) => activeVolunteerFilter === "All" || v.status === activeVolunteerFilter)
+                    .map((v) => (
+                      <div key={v.id} className="volunteer-premium-card">
+                        <div className="volunteer-card-header">
+                          <img src={v.avatar} alt={v.name} className="volunteer-avatar-img" />
+                          <div className="volunteer-header-meta">
+                            <h3 className="volunteer-card-name">{v.name}</h3>
+                            <p className="volunteer-card-contact">{v.email}</p>
+                          </div>
+                          <span className={`status-badge-pill-card volunteer-status ${v.status.toLowerCase().replace(" ", "-")}`}>
+                            {v.status}
+                          </span>
+                        </div>
+                        
+                        <div className="volunteer-card-body">
+                          <div className="volunteer-info-row">
+                            <span className="info-label">Active Campaign:</span>
+                            <span className="info-value font-semibold">{v.campaign}</span>
+                          </div>
+                          <div className="volunteer-info-row">
+                            <span className="info-label">Hours Contributed:</span>
+                            <span className="info-value font-semibold text-primary">{v.hours} hrs</span>
+                          </div>
+                          
+                          <div className="volunteer-skills-tags">
+                            {v.skills.map((skill, sIdx) => (
+                              <span key={sIdx} className="volunteer-skill-tag">{skill}</span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="volunteer-card-footer">
+                          {v.name === "Priya Sharma" ? (
+                            <button className="btn-view-profile" onClick={() => setPage("volunteerProfile")}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                              </svg>
+                              <span>View Profile</span>
+                            </button>
+                          ) : (
+                            <button className="btn-view-profile disabled" onClick={() => alert(`Profile details for ${v.name} are private. Try viewing Priya Sharma's public profile.`)}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                              </svg>
+                              <span>Private Profile</span>
+                            </button>
+                          )}
+                          
+                          <a
+                            href={`mailto:${v.email}`}
+                            className="btn-email-volunteer"
+                            title={`Send email to ${v.name}`}
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                              <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                            <span>Contact</span>
+                          </a>
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
             ) : (

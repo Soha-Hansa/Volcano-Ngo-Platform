@@ -31,7 +31,15 @@ export default function Cta({ setPage = () => {} }) {
               
               {/* CTA Buttons */}
               <div className="cta-buttons">
-                <a href="#" className="btn-cta-primary" id="cta-btn-get-started">
+                <a
+                  href="#"
+                  className="btn-cta-primary"
+                  id="cta-btn-get-started"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage('signup');
+                  }}
+                >
                   Get started free
                 </a>
                 <a

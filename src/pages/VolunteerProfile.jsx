@@ -92,6 +92,28 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme, onStartChat 
                 hours: "6 hrs",
                 description: "Aided local community centers with lunch preparation and logistic coordination of hot meal containers."
             }
+        ],
+        reviews: [
+            {
+                id: 1,
+                reviewer: "Dr. Amit Patel",
+                role: "Executive Director",
+                organization: "Green Earth Initiative",
+                rating: 5.0,
+                message: "Priya is an outstanding volunteer. Her commitment during the Sanjay Gandhi Park Reforestation project was exemplary, and her ability to coordinate teams of new volunteers significantly boosted our impact. A true community leader!",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&fit=crop&crop=faces&auto=format&q=80",
+                date: "Feb 18, 2026"
+            },
+            {
+                id: 2,
+                reviewer: "Sarah Jenkins",
+                role: "Head of Operations",
+                organization: "Hope Kitchen",
+                rating: 4.8,
+                message: "We were thrilled to have Priya support our Winter Meal Program. She is highly reliable, energetic, and brings great problem-solving skills to fast-paced environments. Her 100% attendance rate speaks volumes.",
+                avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&fit=crop&crop=faces&auto=format&q=80",
+                date: "Feb 5, 2026"
+            }
         ]
     };
 
@@ -399,6 +421,36 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme, onStartChat 
                                                     <strong>{event.org}</strong> • <span>{event.role}</span>
                                                 </div>
                                                 <p className="event-desc-paragraph">{event.description}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+
+                            {/* Reviews & Recommendations */}
+                            <section className="profile-section-card reviews-card">
+                                <h3 className="section-title">Endorsements & Reviews</h3>
+                                <div className="profile-reviews-list">
+                                    {volunteer.reviews.map((review) => (
+                                        <div key={review.id} className="profile-review-item">
+                                            <div className="review-header">
+                                                <div className="reviewer-info-wrap">
+                                                    <img src={review.avatar} alt={review.reviewer} className="reviewer-avatar" />
+                                                    <div className="reviewer-meta">
+                                                        <h4 className="reviewer-name">{review.reviewer}</h4>
+                                                        <p className="reviewer-role">{review.role} • <strong>{review.organization}</strong></p>
+                                                    </div>
+                                                </div>
+                                                <div className="review-rating-stars">
+                                                    {Array.from({ length: 5 }).map((_, i) => (
+                                                        <span key={i} className={`star-icon ${i < Math.floor(review.rating) ? 'filled' : ''}`}>★</span>
+                                                    ))}
+                                                    <span className="rating-number">{review.rating.toFixed(1)}</span>
+                                                </div>
+                                            </div>
+                                            <p className="review-message-text">"{review.message}"</p>
+                                            <div className="review-footer-meta">
+                                                <span className="review-date-stamp">{review.date}</span>
                                             </div>
                                         </div>
                                     ))}
