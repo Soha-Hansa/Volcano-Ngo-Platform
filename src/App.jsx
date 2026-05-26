@@ -32,7 +32,10 @@ function App() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
   const [token, setToken] = useState(() => localStorage.getItem('token') || null);
   const [activeDm, setActiveDm] = useState(null);
 
@@ -68,10 +71,19 @@ function App() {
       })
       .then(data => {
         setUser(data.user);
+        localStorage.setItem('user', JSON.stringify(data.user));
       })
       .catch(err => {
         console.error("Token verification failed:", err);
+        if (err.message === "Failed to fetch" || err.message.includes("network") || err.message.includes("load")) {
+          const savedUser = localStorage.getItem('user');
+          if (savedUser) {
+            setUser(JSON.parse(savedUser));
+            return;
+          }
+        }
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setToken(null);
         setUser(null);
       });
@@ -95,12 +107,14 @@ function App() {
 
   const loginUser = (userToken, userData) => {
     localStorage.setItem('token', userToken);
+    localStorage.setItem('user', JSON.stringify(userData));
     setToken(userToken);
     setUser(userData);
   };
 
   const logoutUser = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setToken(null);
     setUser(null);
     setPage('home');

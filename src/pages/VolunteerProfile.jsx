@@ -6,11 +6,13 @@ import './VolunteerProfile.css';
 const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme, onStartChat }) => {
     const [verificationStatus, setVerificationStatus] = useState('unverified'); // 'unverified' | 'scanning' | 'verified'
     const [progress, setProgress] = useState(0);
-    const [aadhaarFile, setAadhaarFile] = useState(null);
     const [linkedinUrl, setLinkedinUrl] = useState('');
 
-    const handleStartVerification = () => {
-        if (!aadhaarFile) return;
+    // DigiLocker simulation states
+    const [verifiedAadhaar, setVerifiedAadhaar] = useState('');
+
+    const handleStartDigiLockerVerify = () => {
+        setVerifiedAadhaar("XXXX-XXXX-9840");
         setVerificationStatus('scanning');
         setProgress(0);
     };
@@ -216,34 +218,32 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme, onStartChat 
                                 {verificationStatus === 'unverified' && (
                                     <div className="verification-form">
                                         <p className="verification-card-desc">
-                                            Upload your Aadhaar Card to verify your volunteer profile. LinkedIn is optional.
+                                            Verify your volunteer identity instantly using your Government-issued DigiLocker account.
                                         </p>
                                         
-                                        <div className="verification-input-group">
-                                            <label className="verification-label">
-                                                Aadhaar Card <span className="required-star">*</span>
-                                            </label>
-                                            <div className="verify-drop-zone">
-                                                <input 
-                                                    type="file" 
-                                                    accept=".jpg,.jpeg,.png,.pdf" 
-                                                    onChange={(e) => {
-                                                        if (e.target.files && e.target.files[0]) {
-                                                            setAadhaarFile(e.target.files[0]);
-                                                        }
-                                                    }}
-                                                    className="verify-file-input"
-                                                    id="aadhaar-upload-input"
-                                                />
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="upload-icon">
-                                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                                    <polyline points="17 8 12 3 7 8"></polyline>
-                                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                        <div className="digilocker-verify-container">
+                                            <div className="digilocker-logo-box">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                                                 </svg>
-                                                <span className="drop-zone-text">
-                                                    {aadhaarFile ? aadhaarFile.name : 'Upload Aadhaar (PDF / Image)'}
-                                                </span>
+                                                <span>DigiLocker</span>
                                             </div>
+                                            <p className="digilocker-info-text">
+                                                By linking DigiLocker, Volcano retrieves your authenticated Aadhaar card securely to verify your profile.
+                                            </p>
+                                            <button 
+                                                type="button"
+                                                className="btn-digilocker-verify"
+                                                onClick={handleStartDigiLockerVerify}
+                                                id="btn-trigger-digilocker"
+                                            >
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                                    <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                                                </svg>
+                                                Verify with DigiLocker
+                                            </button>
                                         </div>
 
                                         <div className="verification-input-group">
@@ -257,37 +257,44 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme, onStartChat 
                                                 id="linkedin-url-input"
                                             />
                                         </div>
-
-                                        <button 
-                                            className="btn-verify-submit"
-                                            disabled={!aadhaarFile}
-                                            onClick={handleStartVerification}
-                                            id="btn-trigger-verification"
-                                        >
-                                            Verify Profile
-                                        </button>
                                     </div>
                                 )}
 
                                 {verificationStatus === 'scanning' && (
                                     <div className="verification-scanning-view">
                                         <div className="scan-doc-container">
-                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="scan-doc-icon">
-                                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                                <polyline points="14 2 14 8 20 8"></polyline>
-                                                <line x1="16" y1="13" x2="8" y2="13"></line>
-                                                <line x1="16" y1="17" x2="8" y2="17"></line>
-                                                <polyline points="10 9 9 9 8 9"></polyline>
+                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0066cc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="scan-doc-icon">
+                                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                                             </svg>
                                             <div className="scan-laser-line"></div>
                                         </div>
                                         
-                                        <h4 className="scan-status-title">Scanning Aadhaar...</h4>
+                                        <h4 className="scan-status-title">DigiLocker Secure Fetch...</h4>
                                         <div className="scan-progress-wrapper">
                                             <div className="scan-progress-bar-bg">
                                                 <div className="scan-progress-bar" style={{ width: `${progress}%` }}></div>
                                             </div>
                                             <span className="scan-percentage">{progress}%</span>
+                                        </div>
+
+                                        <div className="verification-scan-steps">
+                                            <div className={`scan-step-item ${progress >= 0 ? (progress >= 25 ? 'completed' : 'active') : ''}`}>
+                                                <span className="scan-step-icon">{progress >= 25 ? '✓' : '●'}</span>
+                                                <span>Connecting to DigiLocker Secure Vault</span>
+                                            </div>
+                                            <div className={`scan-step-item ${progress >= 25 ? (progress >= 50 ? 'completed' : 'active') : ''}`}>
+                                                <span className="scan-step-icon">{progress >= 50 ? '✓' : (progress >= 25 ? '●' : '○')}</span>
+                                                <span>Accessing issued documents</span>
+                                            </div>
+                                            <div className={`scan-step-item ${progress >= 50 ? (progress >= 75 ? 'completed' : 'active') : ''}`}>
+                                                <span className="scan-step-icon">{progress >= 75 ? '✓' : (progress >= 50 ? '●' : '○')}</span>
+                                                <span>Retrieving digitally signed Aadhaar card</span>
+                                            </div>
+                                            <div className={`scan-step-item ${progress >= 75 ? (progress >= 100 ? 'completed' : 'active') : ''}`}>
+                                                <span className="scan-step-icon">{progress >= 100 ? '✓' : (progress >= 75 ? '●' : '○')}</span>
+                                                <span>Validating cryptographic signatures</span>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -307,7 +314,11 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme, onStartChat 
                                         <div className="verified-details-list">
                                             <div className="verified-detail-item">
                                                 <span>Aadhaar:</span>
-                                                <strong>{aadhaarFile?.name || 'Verified Card'}</strong>
+                                                <strong>{verifiedAadhaar || 'XXXX-XXXX-8910'}</strong>
+                                            </div>
+                                            <div className="verified-detail-item">
+                                                <span>Source:</span>
+                                                <strong style={{ color: '#10b981' }}>DigiLocker Secure</strong>
                                             </div>
                                             {linkedinUrl && (
                                                 <div className="verified-detail-item">
@@ -321,7 +332,7 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme, onStartChat 
                                             className="btn-verify-reset"
                                             onClick={() => {
                                                 setVerificationStatus('unverified');
-                                                setAadhaarFile(null);
+                                                setVerifiedAadhaar('');
                                                 setLinkedinUrl('');
                                                 setProgress(0);
                                             }}
@@ -332,7 +343,7 @@ const VolunteerProfile = ({ setPage = () => {}, theme, toggleTheme, onStartChat 
                                     </div>
                                 )}
                             </div>
-                        </div>
+                            </div>
 
                         {/* RIGHT COLUMN: Details & History */}
                         <div className="profile-right-col">

@@ -823,9 +823,34 @@ const DashboardNgo = ({
                       setTimeout(() => setSaveStatus(""), 3000);
                     })
                     .catch(err => {
-                      setSaveStatus("Error saving changes.");
-                      alert(err.message);
-                      setTimeout(() => setSaveStatus(""), 3000);
+                      if (err.message === "Failed to fetch") {
+                        setSaveStatus("Profile saved locally! (Backend Offline)");
+                        const updatedUser = {
+                          ...JSON.parse(localStorage.getItem('user') || '{}'),
+                          name: ngoData.name,
+                          ngoCategory: ngoData.category,
+                          ngoWebsite: ngoData.website,
+                          address: ngoData.address,
+                          phone: ngoData.phone,
+                          mission: ngoData.mission,
+                          team: ngoData.team,
+                          ngoCertificate: ngoData.ngoCertificate,
+                          certificateName: ngoData.certificateName,
+                          certificateVerified: ngoData.certificateVerified
+                        };
+                        
+                        localStorage.setItem('user', JSON.stringify(updatedUser));
+                        if (propsSetNgoData) {
+                          propsSetNgoData(updatedUser);
+                        } else {
+                          setLocalNgoData(updatedUser);
+                        }
+                        setTimeout(() => setSaveStatus(""), 3000);
+                      } else {
+                        setSaveStatus("Error saving changes.");
+                        alert(err.message);
+                        setTimeout(() => setSaveStatus(""), 3000);
+                      }
                     });
                   }} className="profile-edit-form">
                     <div className="form-grid">

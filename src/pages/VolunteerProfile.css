@@ -1080,4 +1080,473 @@ html.dark .star-icon {
   color: #94a3b8;
 }
 
+/* DigiLocker Verification Styling */
+.digilocker-verify-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  margin-bottom: 20px;
+  transition: all var(--transition-normal);
+}
+
+.digilocker-logo-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-weight: 800;
+  font-size: 18px;
+  color: #0b4a8c;
+}
+
+html.dark .digilocker-logo-box {
+  color: #3b82f6;
+}
+
+.digilocker-info-text {
+  font-size: 13px;
+  color: var(--text-main);
+  line-height: 1.5;
+  margin-bottom: 18px;
+  max-width: 260px;
+}
+
+.btn-digilocker-verify {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0b4a8c 0%, #0066cc 100%);
+  color: #ffffff;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(11, 74, 140, 0.2);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-digilocker-verify:hover {
+  background: linear-gradient(135deg, #0d58a6 0%, #0077ee 100%);
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 16px rgba(11, 74, 140, 0.3);
+}
+
+/* DigiLocker Modal Overlay */
+.digilocker-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: dlModalFadeIn 0.3s ease;
+}
+
+@keyframes dlModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.digilocker-modal-card {
+  width: 90%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: dlModalPopUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+html.dark .digilocker-modal-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+@keyframes dlModalPopUp {
+  from { transform: scale(0.9) translateY(10px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+/* Tricolor Stripe on top of modal */
+.tricolor-stripe {
+  height: 4px;
+  width: 100%;
+  display: flex;
+}
+
+.stripe-orange { flex: 1; background: #ff9933; }
+.stripe-white { flex: 1; background: #ffffff; }
+.stripe-green { flex: 1; background: #128807; }
+
+.digilocker-modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+html.dark .digilocker-modal-header {
+  border-bottom-color: #334155;
+}
+
+.digilocker-header-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.digilocker-modal-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b4a8c;
+  margin: 0;
+}
+
+html.dark .digilocker-modal-header h3 {
+  color: #60a5fa;
+}
+
+.btn-close-dl-modal {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.btn-close-dl-modal:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+html.dark .btn-close-dl-modal:hover {
+  background-color: #334155;
+  color: #f8fafc;
+}
+
+.digilocker-step-body {
+  padding: 24px;
+}
+
+.digilocker-step-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+}
+
+html.dark .digilocker-step-title {
+  color: #f8fafc;
+}
+
+.digilocker-step-desc {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+html.dark .digilocker-step-desc {
+  color: #94a3b8;
+}
+
+.digilocker-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.digilocker-form-group label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+html.dark .digilocker-form-group label {
+  color: #cbd5e1;
+}
+
+.digilocker-input-field {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+html.dark .digilocker-input-field {
+  border-color: #475569;
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+.digilocker-input-field:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15);
+}
+
+.digilocker-consent-box {
+  display: flex;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+
+html.dark .digilocker-consent-box {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.digilocker-consent-box input[type="checkbox"] {
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.digilocker-consent-text {
+  font-size: 11px;
+  color: #475569;
+  line-height: 1.4;
+  margin: 0;
+}
+
+html.dark .digilocker-consent-text {
+  color: #cbd5e1;
+}
+
+.digilocker-modal-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-dl-secondary {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-dl-secondary:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+html.dark .btn-dl-secondary {
+  border-color: #475569;
+  background: #1e293b;
+  color: #cbd5e1;
+}
+
+html.dark .btn-dl-secondary:hover {
+  background: #334155;
+  color: #f8fafc;
+}
+
+.btn-dl-primary {
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: #0066cc;
+  color: #ffffff;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 102, 204, 0.1);
+}
+
+.btn-dl-primary:hover:not(:disabled) {
+  background: #0052a3;
+}
+
+.btn-dl-primary:disabled {
+  background: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+html.dark .btn-dl-primary:disabled {
+  background: #334155;
+  color: #64748b;
+}
+
+/* SMS Toast System */
+.sms-toast-overlay {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.sms-toast-card {
+  pointer-events: auto;
+  width: 320px;
+  background: #ffffff;
+  border-left: 5px solid #0066cc;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 14px 16px;
+  animation: smsSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+html.dark .sms-toast-card {
+  background: #1e293b;
+  border-color: #334155;
+  border-left-color: #3b82f6;
+}
+
+@keyframes smsSlideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.sms-icon-wrap {
+  background: rgba(0, 102, 204, 0.06);
+  color: #0066cc;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html.dark .sms-icon-wrap {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.sms-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sms-sender {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.5px;
+}
+
+html.dark .sms-sender {
+  color: #94a3b8;
+}
+
+.sms-message {
+  font-size: 12.5px;
+  color: #1e293b;
+  line-height: 1.4;
+  margin: 0;
+}
+
+html.dark .sms-message {
+  color: #f8fafc;
+}
+
+.sms-otp-highlight {
+  font-weight: 800;
+  color: #0066cc;
+  background: rgba(0, 102, 204, 0.05);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13.5px;
+}
+
+html.dark .sms-otp-highlight {
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.1);
+}
+
+/* Custom DigiLocker steps view in scan page */
+.verification-scan-steps {
+  width: 100%;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.scan-step-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+html.dark .scan-step-item {
+  color: #94a3b8;
+}
+
+.scan-step-item.active {
+  color: #0066cc;
+  font-weight: 700;
+}
+
+html.dark .scan-step-item.active {
+  color: #60a5fa;
+}
+
+.scan-step-item.completed {
+  color: #10b981;
+}
+
+.scan-step-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
 
